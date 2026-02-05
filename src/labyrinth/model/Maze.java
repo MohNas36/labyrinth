@@ -1,4 +1,4 @@
-package model;
+package labyrinth.model;
 
 import labyrinth.util.collection.Grid;
 
