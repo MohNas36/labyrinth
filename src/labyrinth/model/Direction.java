@@ -7,19 +7,7 @@ public enum Direction {
     LEFT;
 
     public Direction getOpposite(){
-       if (values()[this.ordinal()] == UP) {
-           return Direction.DOWN;
-       }
-       if (values()[this.ordinal()] == DOWN){
-           return Direction.UP;
-       }
-       if(values()[this.ordinal()] == LEFT){
-           return Direction.RIGHT;
-       }
-       if(values()[this.ordinal()] == RIGHT){
-           return Direction.LEFT;
-       }
-       return null;
+       return this.getRotated(2);
     }
 
     public Direction getRotated(int nbTimes){
