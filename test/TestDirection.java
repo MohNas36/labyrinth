@@ -33,4 +33,12 @@ public class TestDirection {
         Direction opposite = etat.getOpposite();
         assertEquals(opposite , Direction.DOWN);
     }
+
+    @Test
+    public void testGetRotated2(){
+        Direction etat = Direction.UP;
+        Direction rotate = etat.getRotated(Direction.DOWN);
+        assertEquals(rotate , Direction.DOWN);
+    }
+
 }

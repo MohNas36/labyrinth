@@ -14,4 +14,8 @@ public enum Direction {
         int x = this.ordinal() + nbTimes % 4 + 4;
         return values()[x % 4];
     }
+
+    public Direction getRotated(Direction direction){
+        return this.getRotated(direction.ordinal());
+    }
 }
