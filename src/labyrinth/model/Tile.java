@@ -36,6 +36,6 @@ public class Tile implements Content{
     }
 
     public Set<Direction> getExits() {
-        return null;
+        return kind.getExits();
     }
 }

@@ -1,9 +1,20 @@
 package labyrinth.model;
 
+import java.util.Set;
+
 public enum TileKind {
     CORRIDOR,
     ELBOW,
-    T_CROSS
+    T_CROSS;
+
+    private final Set<Direction> exits;
 
 
+    TileKind(Direction... exits){
+        this.exits = Set.of(exits);
+    }
+
+    public Set<Direction> getExits(){
+        return this.exits;
+    }
 }
