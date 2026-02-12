@@ -1,6 +1,5 @@
 package labyrinth.model;
 
-import java.util.Collections;
 import java.util.Set;
 
 public enum TileKind {
