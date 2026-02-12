@@ -16,7 +16,6 @@ public enum TileKind {
     }
 
     public Set<Direction> getExits(){
-        Set<Direction> exits = Collections.unmodifiableSet(this.exits);
         return exits;
     }
 }
