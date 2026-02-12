@@ -9,7 +9,7 @@ public class Tile implements Content{
     public Direction direction;
 
     public Tile(TileKind kind) {
-        this.kind = kind;
+        this(kind, new None(), Direction.UP);
     }
 
     public Tile(TileKind kind, Content content) {

@@ -25,20 +25,23 @@ public class MazeFormatter {
 
 
     public String Format(Maze maze){
-        int nbLignes = maze.getFixedRows().size();
+        Grid<Tile> tuiles = maze.getTiles();
+        int h = tuiles.getHeight();
+        //int nbLignes = maze.getFixedRows().size();
         String res = "";
 
-        for(int i = 0 ; i < nbLignes - 1; i++){
+        for(int i = 0 ; i < h; i++){
             if( i > 0){
-                res = res + FormatRow(maze , i);
+                res = res + "\n";
             }
+            res = res + FormatRow(maze , i);
         }
         return res;
     }
 
     public String FormatRow(Maze maze , int y){
         Grid<Tile> grid = maze.getTiles();
-        int nbColomns = maze.getFixedColumns().size();
+        int nbColomns = grid.getWidth();
         String[][] parts = new String[nbColomns][];
 
         for (Grid.Entry<Tile> entry : grid) {
@@ -55,7 +58,7 @@ public class MazeFormatter {
 
         int N = parts[0].length;
         String res = "";
-        for (int i = 0 ; i < N-1 ; i++){
+        for (int i = 0 ; i < N ; i++){
             if(i > 0){
                 res += "\n";
             }
