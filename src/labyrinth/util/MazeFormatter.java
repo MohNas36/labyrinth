@@ -15,7 +15,7 @@ public class MazeFormatter {
 
         StringBuilder ligne1 = new StringBuilder().append("+").append("---").append((up) ? "   " : "---" ).append("---").append("+" + "\n");
         String ligne2 = ("|         |\n");
-        StringBuilder ligne3 = new StringBuilder().append((left) ? " " : "|").append("    ").append(getContentToChar(tile.getContent())).append("    ").append((right) ? " " : "|\n");
+        StringBuilder ligne3 = new StringBuilder().append((left) ? " " : "|").append("    ").append(getContentToChar(tile.getContent())).append("    ").append((right) ? " " : "|").append("\n");
         String ligne4 = ("|         |\n");
         StringBuilder ligne5 = new StringBuilder().append("+").append("---").append((down) ? "   " : "---" ).append("---").append("+" + "\n");
 

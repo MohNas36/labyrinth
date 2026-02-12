@@ -15,6 +15,7 @@ public class Tile implements Content{
     public Tile(TileKind kind, Content content) {
         this.kind = kind;
         this.content = content;
+        this.direction = Direction.UP;
     }
 
     public Tile(TileKind kind, Content content, Direction direction) {
