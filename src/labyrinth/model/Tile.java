@@ -1,5 +1,6 @@
 package labyrinth.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Tile implements Content{
@@ -20,6 +21,7 @@ public class Tile implements Content{
         this.kind = kind;
         this.content = content;
         this.direction = direction;
+
     }
 
     public TileKind getKind() {
@@ -35,6 +37,10 @@ public class Tile implements Content{
     }
 
     public Set<Direction> getExits() {
-        return kind.getExits();
+        Set<Direction> exits = new HashSet<Direction>();
+        for (Direction d : kind.getExits()) {
+            exits.add(d.getRotated(direction));
+        }
+        return exits;
     }
 }

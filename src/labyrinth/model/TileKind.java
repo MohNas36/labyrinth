@@ -1,5 +1,6 @@
 package labyrinth.model;
 
+import java.util.Collections;
 import java.util.Set;
 
 public enum TileKind {
@@ -15,6 +16,7 @@ public enum TileKind {
     }
 
     public Set<Direction> getExits(){
-        return this.exits;
+        Set<Direction> exits = Collections.unmodifiableSet(this.exits);
+        return exits;
     }
 }
