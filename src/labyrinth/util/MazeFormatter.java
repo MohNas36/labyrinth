@@ -72,7 +72,7 @@ public class MazeFormatter {
 
     private char getContentToChar(Content c){
         if(c instanceof None) return ' ';
-        if( c instanceof StartingPoisiton sp) return (char) ('0' + sp.index());
+        if( c instanceof StartingPosition sp) return (char) ('0' + sp.index());
         if( c instanceof Treasure tr) return (char) ('A' + tr.id());
         return '?' ;
     }
