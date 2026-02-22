@@ -50,10 +50,11 @@ public class MazeBuilder {
             }
         }
 
-        Tile extraTile = L.get(L.size() - 1);
+        Tile extraTile = L.remove(L.size() - 1);
 
 
-        Maze m = new Maze(this.tiles, extraTile, this.fixRows, this.fixCols);
-        return m;
+        return new Maze(this.tiles, extraTile, this.fixRows, this.fixCols);
     }
+
+
 }
