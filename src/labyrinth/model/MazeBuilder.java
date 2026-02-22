@@ -1,10 +1,8 @@
 package labyrinth.model;
 
 import labyrinth.util.collection.ArrayGrid;
-import labyrinth.util.collection.Grid;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class MazeBuilder {
     private ArrayGrid<Tile> tiles;
@@ -32,8 +30,30 @@ public class MazeBuilder {
     }
 
     public Maze build(){
+        List<Tile> L = new ArrayList<>();
+        L.addAll(freeTiles);
+        Collections.shuffle(L);
 
-        Maze m = new Maze(this.tiles, null, this.fixRows, this.fixCols);
+        for(int i = 0; i < L.size(); i++) {
+            int n = (int) (Math.random() * 4);
+            Tile tile = L.get(i);
+            L.set(i, new Tile(tile.getKind(), tile.getContent(), tile.getOrientation().getRotated(n)));
+        }
+
+        int i = 0;
+        for(int x = 0; x < tiles.getWidth(); x++){
+            for(int y = 0; y < tiles.getHeight(); y++){
+                if(tiles.get(x, y) == null){
+                    tiles.set(x, y, L.get(i));
+                    i++;
+                }
+            }
+        }
+
+        Tile extraTile = L.get(L.size() - 1);
+
+
+        Maze m = new Maze(this.tiles, extraTile, this.fixRows, this.fixCols);
         return m;
     }
 }
