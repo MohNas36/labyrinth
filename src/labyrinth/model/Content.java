@@ -1,4 +1,3 @@
 package labyrinth.model;
 
-public interface Content<Sealed> {
-}
+public sealed interface Content permits None, StartingPosition, Treasure {}
