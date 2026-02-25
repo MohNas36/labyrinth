@@ -42,4 +42,22 @@ public class Maze {
     public Tile getExtraTile() {
         return extraTile;
     }
+
+    public Tile getTile(Player p){
+        for(Grid.Entry<Tile> entry : tiles){
+            if(entry.value().getPlayers().contains(p)){
+                return entry.value();
+            }
+        }
+        return null;
+    }
+
+    public Tile getStartingTile(Player p){
+        for(Grid.Entry<Tile> entry : tiles){
+            if(entry.value().getContent().equals(new StartingPosition(p.getIndex()))){
+                return entry.value();
+            }
+        }
+        return null;
+    }
 }
