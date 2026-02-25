@@ -43,18 +43,42 @@ public class MazeBuilder {
         int i = 0;
         for(int x = 0; x < tiles.getWidth(); x++){
             for(int y = 0; y < tiles.getHeight(); y++){
-                if(tiles.get(x, y) == null){
+                if(tiles.get(x, y) == null && L.size() > 1){
                     tiles.set(x, y, L.get(i));
                     i++;
                 }
             }
         }
 
-        Tile extraTile = L.remove(L.size() - 1);
+        Tile extraTile = L.get(0);
 
 
         return new Maze(this.tiles, extraTile, this.fixRows, this.fixCols);
     }
 
 
+    public static Maze buildStandardMaze(){
+        MazeBuilder mb = new MazeBuilder(7, 7);
+        Tile j1 = new Tile(TileKind.ELBOW, new StartingPosition(1));
+        Tile j2 = new Tile(TileKind.ELBOW, new StartingPosition(2));
+        Tile j3 = new Tile(TileKind.ELBOW, new StartingPosition(3));
+        Tile j4 = new Tile(TileKind.ELBOW, new StartingPosition(4));
+
+        mb.addFixedTile(0, 0, j1);
+        mb.addFixedTile(6, 6, j2);
+        mb.addFixedTile(0, 6, j3);
+        mb.addFixedTile(6, 0, j4);
+
+        int id = 0;
+        for(int i = 0; i < 7; i++){
+            for(int j = 0; j < 7; j++){
+                if((i % 2 == 0 && j % 2 == 0) && !((i == 0 && j == 0) || (i == 0 && j == 6) || (i == 6 && j == 0) || (i == 6 && j == 6))){
+                    mb.addFixedTile(i, j, new Tile(TileKind.T_CROSS, new Treasure(id)));
+                    id++;
+                }
+            }
+        }
+
+        return new Maze(null, null, null, null);
+    }
 }
