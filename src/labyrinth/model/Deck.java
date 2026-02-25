@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Deck {
-    List<Integer> drawPile;
-    List<Integer> discardPile;
+    private List<Integer> drawPile;
+    private List<Integer> discardPile;
 
     public Deck() {
         drawPile = new ArrayList<>();
