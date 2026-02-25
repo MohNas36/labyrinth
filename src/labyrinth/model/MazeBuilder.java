@@ -79,6 +79,28 @@ public class MazeBuilder {
             }
         }
 
-        return new Maze(null, null, null, null);
+        for(int i = 0; i < 13; i++){
+            mb.addFreeTile(new Tile(TileKind.CORRIDOR));
+        }
+
+        int id2 = 0;
+        for(int i = 0; i < 15; i++){
+            if(id2 < 6){
+                /*Multiplication par 10 pour pouvoir distinguer*/
+                mb.addFreeTile(new Tile(TileKind.ELBOW, new Treasure(id2 * 10)));
+                id2++;
+            }else{
+                mb.addFreeTile(new Tile(TileKind.ELBOW));
+            }
+        }
+
+        int id3 = 0;
+        for(int i = 0; i < 6; i++){
+            /*Multiplication par 20 pour pouvoir distinguer*/
+            mb.addFreeTile(new Tile(TileKind.T_CROSS, new Treasure(id3 * 20)));
+            id3++;
+        }
+
+        return mb.build();
     }
 }
