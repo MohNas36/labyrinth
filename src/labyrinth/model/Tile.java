@@ -1,12 +1,15 @@
 package labyrinth.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Tile{
     private TileKind kind;
     private Content content;
-    public Direction direction;
+    private Direction direction;
+    private List<Player> players = new ArrayList<Player>(4);
 
     public Tile(TileKind kind) {
         this(kind, new None(), Direction.UP);
@@ -43,5 +46,13 @@ public class Tile{
             exits.add(d.getRotated(direction));
         }
         return exits;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void addPlayer(Player player) {
+        players.add(player);
     }
 }
