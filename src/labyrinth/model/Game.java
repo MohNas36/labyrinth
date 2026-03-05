@@ -1,11 +1,16 @@
 package labyrinth.model;
 
+import labyrinth.util.collection.Grid;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Game {
     private Maze maze;
     private List<Slot> slots;
+    private GameState gameState;
+    private int currentPlayerIndex;
 
     public Game() {
         this.maze = MazeBuilder.buildStandardMaze();
@@ -16,6 +21,10 @@ public class Game {
     }
 
     public Slot getSlot(int index) {
+        if(gameState == GameState.SETUP){
+            return null;
+        }
+
         for(Slot slot : slots) {
             if(slot.getIndex() == index){
                 return slot;
@@ -25,10 +34,62 @@ public class Game {
     }
 
     public Maze getMaze() {
+        if(gameState == GameState.SETUP){
+            return null;
+        }
         return maze;
     }
 
     public Tile getTile(Player player) {
+        if(gameState == GameState.SETUP){
+            return null;
+        }
         return maze.getTile(player);
+    }
+
+    public GameState getGameState(GameState gameState){
+        return gameState;
+    }
+
+    public Player getCurrentPlayer(){
+        return getSlot(currentPlayerIndex).getPlayer();
+    }
+
+    public void reset(){
+        this.gameState = GameState.SETUP;
+        this.maze = null;
+        this.currentPlayerIndex = -1;
+
+        for(Slot slot : slots){
+            if(slot.getPlayer() != null) {
+                slot.close();
+            }
+        }
+    }
+
+    public void init(){
+        if(gameState == GameState.SETUP) {
+            this.maze = MazeBuilder.buildStandardMaze();
+            Random random = new Random();
+            this.currentPlayerIndex = random.nextInt(0, 4);
+        }
+        // a faire : Placer les joueurs sur leur starting position et gerer les decks
+
+    }
+
+    public void RotateExtraTile(int nbTimes){
+        if(gameState == GameState.MAZE_MOVE) {
+            maze.getExtraTile().getOrientation().getRotated(nbTimes);
+        }
+    }
+
+    public void movePlayer(Tile tile){
+        if(gameState == GameState.PLAYER_MOVE){
+            Tile tileJoueur = maze.getTile(getCurrentPlayer());
+            tileJoueur.removePlayer(getCurrentPlayer());
+            tile.addPlayer(getCurrentPlayer());
+
+            //if(!getCurrentPlayer().getDeck(). a faire: condition pour gagner
+        }
     }
 }
