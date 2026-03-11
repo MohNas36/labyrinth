@@ -92,4 +92,9 @@ public class Game {
             //if(!getCurrentPlayer().getDeck(). a faire: condition pour gagner
         }
     }
+
+    public void endTurn(){
+        currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
+        gameState = GameState.MAZE_MOVE;
+    }
 }
