@@ -17,4 +17,12 @@ public class Slot {
     public Player getPlayer(){
         return p;
     }
+
+    public void open(){
+        this.p = new Player(index);
+    }
+
+    public void close(){
+        this.p = null;
+    }
 }

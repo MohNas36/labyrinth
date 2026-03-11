@@ -77,13 +77,14 @@ public class Game {
             for(int i = 0 ; i < 4 ; i++ ){
                 Player player = this.getSlot(i).getPlayer();
 
-                for(Tile tile : this.maze.getTiles()){ // demander le prof
+                for(Tile tile : this.maze.getTiles()){ // demander le prof + gérer les decks
                     if(tile.getContent() instanceof StartingPosition sp && sp.index() == i){
                         tile.addPlayer(player);
                     }
                 }
             }
         }
+        this.gameState = GameState.MAZE_MOVE;
     }
 
     public void RotateExtraTile(int nbTimes){
@@ -110,4 +111,6 @@ public class Game {
         currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
         gameState = GameState.MAZE_MOVE;
     }
+
+    // demander le prof pour mazeMove
 }
