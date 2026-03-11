@@ -19,4 +19,16 @@ public class Deck {
     public List<Integer> getDiscardPile() {
         return discardPile;
     }
+
+    public void init(List<Integer> treasures){
+        this.drawPile.clear();
+        this.drawPile.addAll(treasures);
+        this.discardPile.clear();
+    }
+
+    public void discard(){
+        int carte = this.drawPile.removeFirst();
+        this.discardPile.add(carte);
+
+    }
 }
