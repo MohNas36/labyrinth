@@ -72,9 +72,18 @@ public class Game {
             this.maze = MazeBuilder.buildStandardMaze();
             Random random = new Random();
             this.currentPlayerIndex = random.nextInt(0, 4);
-        }
-        // a faire : Placer les joueurs sur leur starting position et gerer les decks
 
+            //placer les joueurs sur leurs case de depart
+            for(int i = 0 ; i < 4 ; i++ ){
+                Player player = this.getSlot(i).getPlayer();
+
+                for(Tile tile : this.maze.getTiles()){ // demander le prof
+                    if(tile.getContent() instanceof StartingPosition sp && sp.index() == i){
+                        tile.addPlayer(player);
+                    }
+                }
+            }
+        }
     }
 
     public void RotateExtraTile(int nbTimes){
@@ -89,7 +98,11 @@ public class Game {
             tileJoueur.removePlayer(getCurrentPlayer());
             tile.addPlayer(getCurrentPlayer());
 
-            //if(!getCurrentPlayer().getDeck(). a faire: condition pour gagner
+            if(!getCurrentPlayer().getDeck().getDrawPile().isEmpty() && tile.getContent() instanceof StartingPosition pos && pos.index() == currentPlayerIndex){
+                this.gameState = GameState.GAME_OVER;
+            }else{
+                this.gameState = GameState.TURN_END;
+            }
         }
     }
 
