@@ -55,4 +55,12 @@ public class Tile{
     public void addPlayer(Player player) {
         players.add(player);
     }
+
+    public void removePlayer(Player player){
+        players.remove(player);
+    }
+
+    public void rotate(int nbTimes){
+        this.direction = direction.getRotated(nbTimes);
+    }
 }
