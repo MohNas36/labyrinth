@@ -35,17 +35,20 @@ public class Maze {
             }
         }
 
-        /*
         ArrayList<Treasure> treasures = new ArrayList<>();
         ArrayList<StartingPosition> s_positions = new ArrayList<>();
+
         for(int i = 0; i < tiles.getHeight(); i++){
             for(int j = 0; j < tiles.getWidth(); j++){
                 Tile t1 = tiles.get(i, j);
-                if(t1.getContent() instanceof Treasure t){
-                    t.id() == 0;
+                Content c = t1.getContent();
+
+                if(c instanceof Treasure tr){
+                    treasures.add(tr);
                 }
-                if(t1.getContent() == new StartingPosition()){
-                    s_positions.add(t1.getContent());
+
+                if(c instanceof StartingPosition s_pos){
+                    s_positions.add(s_pos);
                 }
             }
         }
@@ -53,21 +56,23 @@ public class Maze {
         for(int i = 0; i < treasures.size(); i++){
             Treasure t1 = treasures.get(i);
             for(int k = i; k < treasures.size(); k++){
-                if(t1.equals(treasures.get(k))){
+                Treasure t2 = treasures.get(k);
+                if(t1.id() == t2.id()){
                     throw new IllegalArgumentException("Il y a un tresor sur plusieurs tuiles");
                 }
             }
         }
 
         for(int i = 0; i < s_positions.size(); i++){
-            StartingPosition p = s_positions.get(i);
+            StartingPosition s_pos = s_positions.get(i);
             for(int k = i; k < s_positions.size(); k++){
-                if(p.equals(s_positions.get(k))){
+                StartingPosition s_pos2 = s_positions.get(k);
+                if(s_pos.index() == s_pos2.index()){
                     throw new IllegalArgumentException("Il y a une StartingPosition sur plusieurs tuiles");
                 }
             }
         }
-         */
+
 
         this.tiles = tiles;
         this.fixedRows = fixedRows;
