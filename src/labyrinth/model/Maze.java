@@ -13,6 +13,7 @@ public class Maze {
     private Set<Integer> fixedRows;
     private Set<Integer> fixedColumns;
     private Tile extraTile;
+    private MazeMove mazeMove;
 
     public Maze(Grid<Tile> tiles, Tile extraTile, Set<Integer> fixedRows, Set<Integer> fixedColumns) {
         if(tiles == null || extraTile == null || fixedRows == null || fixedColumns == null) {
@@ -121,5 +122,63 @@ public class Maze {
             }
         }
         return null;
+    }
+
+    public MazeMove getForbiddenMove(){
+        return this.mazeMove.getOpposite();
+    }
+
+    public void move(MazeMove mazeMove){
+
+        Direction direction = mazeMove.direction();
+        int index = mazeMove.index();
+
+        Tile expelled = this.extraTile;
+        Tile oldExtra = this.extraTile;
+
+        switch (direction) {
+            case RIGHT ->
+                {
+                expelled = this.tiles.get(index, tiles.getWidth() - 1);
+                    for (int i = tiles.getWidth() - 1; i > 0; i--) {
+                        this.tiles.set(index, i, this.tiles.get(index, i + 1));
+                    }
+                    this.tiles.set(index, 0, oldExtra);
+                    this.extraTile = expelled;
+                }
+            case LEFT -> {
+                expelled = this.tiles.get(index, 0);
+                for (int i = 0; i < tiles.getWidth() - 1; i++) {
+                    this.tiles.set(index, i, this.tiles.get(index, i - 1));
+                }
+                this.tiles.set(index, tiles.getWidth() - 1, oldExtra);
+                this.extraTile = expelled;
+            }
+            case DOWN -> {
+                expelled = this.tiles.get(tiles.getHeight() - 1, index);
+                for (int i = tiles.getHeight() - 1; i > 0; i--) {
+                    this.tiles.set(i, index, tiles.get(i - 1, index));
+                }
+                this.tiles.set(0, index, oldExtra);
+                this.extraTile = expelled;
+            }
+            case UP -> {
+                expelled = this.tiles.get(0, index);
+                for (int i = 0; i < tiles.getHeight() - 1; i++) {
+                    this.tiles.set(i, index, this.tiles.get(i + 1, index));
+                }
+                this.tiles.set(this.tiles.getHeight() - 1, index, oldExtra);
+                this.extraTile = expelled;
+            }
+            default -> {
+                throw new IllegalArgumentException("Direction Invalide");
+            }
+        }
+        if(expelled.getPlayers() != null ){
+            for(Player p : expelled.getPlayers()){
+                this.extraTile.removePlayer(p);
+                oldExtra.addPlayer(p);
+            }
+        }
     }
 }
