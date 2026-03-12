@@ -68,6 +68,7 @@ public class Game {
     }
 
     public void init(){
+
         if(gameState == GameState.SETUP) {
             this.maze = MazeBuilder.buildStandardMaze();
             Random random = new Random();
@@ -77,12 +78,16 @@ public class Game {
             for(int i = 0 ; i < 4 ; i++ ){
                 Player player = this.getSlot(i).getPlayer();
 
-                for(Tile tile : this.maze.getTiles()){ // demander le prof + gérer les decks
-                    if(tile.getContent() instanceof StartingPosition sp && sp.index() == i){
-                        tile.addPlayer(player);
-                    }
+                for(Slot slot : slots ){
+                   Player actuel = slot.getPlayer();
+                   Tile start = maze.getStartingTile(actuel);
+                   start.addPlayer(actuel);
                 }
             }
+
+            //Gérer les decks
+            //reaprtir les tresors
+            //aleatoirement
         }
         this.gameState = GameState.MAZE_MOVE;
     }
@@ -111,6 +116,4 @@ public class Game {
         currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
         gameState = GameState.MAZE_MOVE;
     }
-
-    // demander le prof pour mazeMove
 }
