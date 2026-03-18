@@ -68,6 +68,9 @@ public class Game {
     }
 
     public void init(){
+        if(gameState != GameState.SETUP){
+            throw new IllegalStateException("Le jeu n'est pas dans SETUP");
+        }
 
         if(gameState == GameState.SETUP) {
             this.maze = MazeBuilder.buildStandardMaze();
@@ -93,12 +96,20 @@ public class Game {
     }
 
     public void RotateExtraTile(int nbTimes){
+        if(gameState != GameState.MAZE_MOVE){
+            throw new IllegalStateException("Le jeu n'est pas dans Maze Move");
+        }
         if(gameState == GameState.MAZE_MOVE) {
             maze.getExtraTile().getOrientation().getRotated(nbTimes);
         }
     }
 
     public void movePlayer(Tile tile){
+        if(gameState != GameState.PLAYER_MOVE){
+            throw new IllegalStateException("Le jeu n'est pas dans Player Move");
+        }
+
+
         if(gameState == GameState.PLAYER_MOVE){
             Tile tileJoueur = maze.getTile(getCurrentPlayer());
             tileJoueur.removePlayer(getCurrentPlayer());
@@ -113,7 +124,13 @@ public class Game {
     }
 
     public void endTurn(){
+        if(gameState != GameState.TURN_END){
+            throw new IllegalStateException("Le jeu n'est pas dans END TURN");
+        }
+
         currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
         gameState = GameState.MAZE_MOVE;
     }
+
+    // a faire la fonction moveMaze;
 }
