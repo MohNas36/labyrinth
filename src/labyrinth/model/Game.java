@@ -53,6 +53,9 @@ public class Game {
     }
 
     public Player getCurrentPlayer(){
+        if(gameState == GameState.SETUP){
+            return null;
+        }
         return getSlot(currentPlayerIndex).getPlayer();
     }
 
@@ -114,13 +117,11 @@ public class Game {
         this.gameState = GameState.MAZE_MOVE;
     }
 
-    public void RotateExtraTile(int nbTimes){
+    public void rotateExtraTile(int nbTimes){
         if(gameState != GameState.MAZE_MOVE){
             throw new IllegalStateException("Le jeu n'est pas dans Maze Move");
         }
-        if(gameState == GameState.MAZE_MOVE) {
-            maze.getExtraTile().getOrientation().getRotated(nbTimes);
-        }
+        maze.getExtraTile().rotate(nbTimes);
     }
 
     public void movePlayer(Tile tile){
