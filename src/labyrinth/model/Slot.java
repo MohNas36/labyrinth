@@ -19,10 +19,22 @@ public class Slot {
     }
 
     public void open(){
+        if(game.getGameState() != GameState.SETUP){
+            throw new IllegalStateException("Le jeu n'est pas dans SETUP");
+        }
+        if(p != null){
+            throw new IllegalStateException("Le slot contient déja un joueur");
+        }
         this.p = new Player(index);
     }
 
     public void close(){
+        if(game.getGameState() != GameState.SETUP){
+            throw new IllegalStateException("Le jeu n'est pas dans SETUP");
+        }
+        if(p == null){
+            throw new IllegalStateException("Le slot ne contient pas de joueur");
+        }
         this.p = null;
     }
 }
