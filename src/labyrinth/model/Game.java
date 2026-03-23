@@ -13,7 +13,8 @@ public class Game {
     private int currentPlayerIndex;
 
     public Game() {
-        this.maze = MazeBuilder.buildStandardMaze();
+        this.maze = null;
+        gameState = GameState.SETUP;
         this.slots = new ArrayList<>(4);
         for(int i = 0; i < 4; i++) {
             slots.add(new Slot(this, i));
@@ -47,7 +48,7 @@ public class Game {
         return maze.getTile(player);
     }
 
-    public GameState getGameState(GameState gameState){
+    public GameState getGameState(){
         return gameState;
     }
 
@@ -72,26 +73,21 @@ public class Game {
             throw new IllegalStateException("Le jeu n'est pas dans SETUP");
         }
 
-        if(gameState == GameState.SETUP) {
-            this.maze = MazeBuilder.buildStandardMaze();
-            Random random = new Random();
-            this.currentPlayerIndex = random.nextInt(0, 4);
+        this.maze = MazeBuilder.buildStandardMaze();
+        Random random = new Random();
+        this.currentPlayerIndex = random.nextInt(0, 4);
 
-            //placer les joueurs sur leurs case de depart
-            for(int i = 0 ; i < 4 ; i++ ){
-                Player player = this.getSlot(i).getPlayer();
-
-                for(Slot slot : slots ){
-                   Player actuel = slot.getPlayer();
-                   Tile start = maze.getStartingTile(actuel);
-                   start.addPlayer(actuel);
-                }
-            }
-
-            //Gérer les decks
-            //reaprtir les tresors
-            //aleatoirement
+        //placer les joueurs sur leurs case de depart
+        for(Slot slot : slots){
+            slot.open();
         }
+
+        for(Slot slot : slots ){
+           Player actuel = slot.getPlayer();
+           Tile start = maze.getStartingTile(actuel);
+           start.addPlayer(actuel);
+        }
+
         this.gameState = GameState.MAZE_MOVE;
     }
 
@@ -109,18 +105,15 @@ public class Game {
             throw new IllegalStateException("Le jeu n'est pas dans Player Move");
         }
 
-
-        if(gameState == GameState.PLAYER_MOVE){
-            Tile tileJoueur = maze.getTile(getCurrentPlayer());
-            tileJoueur.removePlayer(getCurrentPlayer());
-            tile.addPlayer(getCurrentPlayer());
-
-            if(!getCurrentPlayer().getDeck().getDrawPile().isEmpty() && tile.getContent() instanceof StartingPosition pos && pos.index() == currentPlayerIndex){
-                this.gameState = GameState.GAME_OVER;
-            }else{
-                this.gameState = GameState.TURN_END;
-            }
+        Tile tileJoueur = maze.getTile(getCurrentPlayer());
+        tileJoueur.removePlayer(getCurrentPlayer());
+        tile.addPlayer(getCurrentPlayer());
+        if(getCurrentPlayer().getDeck().getDrawPile().isEmpty() && tile.getContent() instanceof StartingPosition pos && pos.index() == currentPlayerIndex){
+            this.gameState = GameState.GAME_OVER;
+        }else{
+            this.gameState = GameState.TURN_END;
         }
+
     }
 
     public void endTurn(){
