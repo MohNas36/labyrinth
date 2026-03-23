@@ -125,13 +125,36 @@ public class Maze {
     }
 
     public MazeMove getForbiddenMove(){
+        if(this.mazeMove == null){
+            return null;
+        }
         return this.mazeMove.getOpposite();
     }
 
     public void move(MazeMove mazeMove){
 
+        if(mazeMove == null){
+            throw new IllegalArgumentException("Le déplacement est null");
+        }
+
         Direction direction = mazeMove.direction();
         int index = mazeMove.index();
+
+        if(index < 0 || index >= tiles.getWidth()){
+            throw new IllegalArgumentException("Index hors bornes");
+        }
+
+        if((direction == Direction.LEFT || direction == Direction.RIGHT) && fixedRows.contains(index)){
+            throw new IllegalArgumentException("Ligne fixe");
+        }
+
+        if((direction == Direction.UP || direction == Direction.DOWN) && fixedColumns.contains(index)){
+            throw new IllegalArgumentException("Colonne fixe");
+        }
+
+        if(getForbiddenMove() != null && getForbiddenMove().equals(mazeMove)){
+            throw new IllegalArgumentException("Déplacement interdit");
+        }
 
         Tile expelled = this.extraTile;
         Tile oldExtra = this.extraTile;
