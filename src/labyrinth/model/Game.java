@@ -148,5 +148,12 @@ public class Game {
         gameState = GameState.MAZE_MOVE;
     }
 
-    // a faire la fonction moveMaze;
+    public void mazeMove(MazeMove mazeMove){
+        if(gameState != GameState.MAZE_MOVE){
+            throw new IllegalStateException("Le jeu n'est pas dans Maze Move");
+        }
+
+        maze.move(mazeMove);
+        gameState = GameState.PLAYER_MOVE;
+    }
 }
