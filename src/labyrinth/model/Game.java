@@ -75,7 +75,6 @@ public class Game {
 
         this.maze = MazeBuilder.buildStandardMaze();
         Random random = new Random();
-        this.currentPlayerIndex = random.nextInt(0, 4);
 
         //placer les joueurs sur leurs case de depart
         for(Slot slot : slots){
@@ -87,6 +86,30 @@ public class Game {
            Tile start = maze.getStartingTile(actuel);
            start.addPlayer(actuel);
         }
+
+        List<Integer> treasures = new ArrayList<>();
+        for(Grid.Entry<Tile> entry : maze.getTiles()){
+            Content content = entry.value().getContent();
+            if(content instanceof Treasure tr){
+                treasures.add(tr.id());
+            }
+        }
+
+        List<Integer>[] playerTreasures = new ArrayList[slots.size()];
+        // on crée une liste pour chaque joueur
+        for(int i = 0 ; i < slots.size() ; i++){
+            playerTreasures[i] = new ArrayList<>();
+        }
+
+        for(int i = 0 ; i < treasures.size() ; i++){
+            playerTreasures[i % slots.size()].add(treasures.get(i)); // le % sert a répartir les trseors en tournant entrre les joueurs
+        }
+
+        for(int i = 0 ; i <slots.size() ; i++){
+            slots.get(i).getPlayer().getDeck().init(playerTreasures[i]); // on initialise chaque deck de joueur
+        }
+
+        this.currentPlayerIndex = random.nextInt(slots.size());
 
         this.gameState = GameState.MAZE_MOVE;
     }
