@@ -59,10 +59,10 @@ public class MazeBuilder {
 
     public static Maze buildStandardMaze(){
         MazeBuilder mb = new MazeBuilder(7, 7);
-        Tile j1 = new Tile(TileKind.ELBOW, new StartingPosition(1));
-        Tile j2 = new Tile(TileKind.ELBOW, new StartingPosition(2));
-        Tile j3 = new Tile(TileKind.ELBOW, new StartingPosition(3));
-        Tile j4 = new Tile(TileKind.ELBOW, new StartingPosition(4));
+        Tile j1 = new Tile(TileKind.ELBOW, new StartingPosition(0));
+        Tile j2 = new Tile(TileKind.ELBOW, new StartingPosition(1));
+        Tile j3 = new Tile(TileKind.ELBOW, new StartingPosition(2));
+        Tile j4 = new Tile(TileKind.ELBOW, new StartingPosition(3));
 
         mb.addFixedTile(0, 0, j1);
         mb.addFixedTile(6, 6, j2);
@@ -87,18 +87,17 @@ public class MazeBuilder {
         for(int i = 0; i < 15; i++){
             if(id2 < 6){
                 /*Multiplication par 10 pour pouvoir distinguer*/
-                mb.addFreeTile(new Tile(TileKind.ELBOW, new Treasure(id2 * 10)));
+                mb.addFreeTile(new Tile(TileKind.ELBOW, new Treasure(id + id2)));
                 id2++;
             }else{
                 mb.addFreeTile(new Tile(TileKind.ELBOW));
             }
         }
 
-        int id3 = 0;
         for(int i = 0; i < 6; i++){
             /*Multiplication par 20 pour pouvoir distinguer*/
-            mb.addFreeTile(new Tile(TileKind.T_CROSS, new Treasure(id3 * 20)));
-            id3++;
+            mb.addFreeTile(new Tile(TileKind.T_CROSS, new Treasure(id + id2)));
+            id2++;
         }
 
         return mb.build();

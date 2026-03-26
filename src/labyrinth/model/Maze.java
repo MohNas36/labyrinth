@@ -20,9 +20,9 @@ public class Maze {
             throw new NullPointerException("Au moins un des parametres du labyrinthe est null");
         }
 
-        for(int i = 0; i < tiles.getHeight(); i++){
-            for(int j = 0; j < tiles.getWidth(); j++){
-                if(tiles.get(i, j) == null){
+        for(int x = 0; x < tiles.getHeight(); x++){
+            for(int y = 0; y < tiles.getWidth(); y++){
+                if(tiles.get(x, y) == null){
                     throw new NullPointerException("La grille n'est pas complete");
                 }
             }
@@ -124,7 +124,7 @@ public class Maze {
 
     public Tile getStartingTile(Player p){
         for(Grid.Entry<Tile> entry : tiles){
-            if(entry.value().getContent().equals(new StartingPosition(p.getIndex()))){
+            if(entry.value().getContent() instanceof StartingPosition s && (p.getIndex() == s.index())) {
                 return entry.value();
             }
         }
