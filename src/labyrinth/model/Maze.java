@@ -19,14 +19,21 @@ public class Maze {
         if(tiles == null || extraTile == null || fixedRows == null || fixedColumns == null) {
             throw new NullPointerException("Au moins un des parametres du labyrinthe est null");
         }
-        Require.noNullElement((Collection<?>) tiles, "La grille n'est pas complete");
+
+        for(int i = 0; i < tiles.getHeight(); i++){
+            for(int j = 0; j < tiles.getWidth(); j++){
+                if(tiles.get(i, j) == null){
+                    throw new NullPointerException("La grille n'est pas complete");
+                }
+            }
+        }
 
         for(int i = 0; i < tiles.getHeight(); i++){
             for(int j = 0; j < tiles.getWidth(); j++){
                 Tile t1 = tiles.get(i, j);
 
-                for(int k = i; k < tiles.getWidth(); k++){
-                    for(int l = j; l < tiles.getHeight(); l++){
+                for(int k = i + 1; k < tiles.getWidth(); k++){
+                    for(int l = j + 1; l < tiles.getHeight(); l++){
                         Tile t2 = tiles.get(k, l);
                         if(t1.equals(t2)){
                             throw new IllegalArgumentException("Il existe une tuile identique dans la grille");
@@ -56,7 +63,7 @@ public class Maze {
 
         for(int i = 0; i < treasures.size(); i++){
             Treasure t1 = treasures.get(i);
-            for(int k = i; k < treasures.size(); k++){
+            for(int k = i + 1; k < treasures.size(); k++){
                 Treasure t2 = treasures.get(k);
                 if(t1.id() == t2.id()){
                     throw new IllegalArgumentException("Il y a un tresor sur plusieurs tuiles");
@@ -66,7 +73,7 @@ public class Maze {
 
         for(int i = 0; i < s_positions.size(); i++){
             StartingPosition s_pos = s_positions.get(i);
-            for(int k = i; k < s_positions.size(); k++){
+            for(int k = i + 1; k < s_positions.size(); k++){
                 StartingPosition s_pos2 = s_positions.get(k);
                 if(s_pos.index() == s_pos2.index()){
                     throw new IllegalArgumentException("Il y a une StartingPosition sur plusieurs tuiles");
