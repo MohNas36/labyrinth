@@ -1,6 +1,9 @@
 package labyrinth.model;
 
 import labyrinth.util.collection.Grid;
+import labyrinth.util.graph.Graph;
+import labyrinth.util.graph.MazeToGraphAdapter;
+import labyrinth.util.graph.Paths;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,7 @@ public class Game {
     private Maze maze;
     private List<Slot> slots;
     private GameState gameState;
+    private Paths<Tile> paths;
     private int currentPlayerIndex;
 
     public Game() {
@@ -69,6 +73,7 @@ public class Game {
                 slot.close();
             }
         }
+        this.paths = null;
     }
 
     public void init(){
@@ -115,6 +120,7 @@ public class Game {
         this.currentPlayerIndex = random.nextInt(slots.size());
 
         this.gameState = GameState.MAZE_MOVE;
+        updatePaths();
     }
 
     public void rotateExtraTile(int nbTimes){
@@ -127,6 +133,10 @@ public class Game {
     public void movePlayer(Tile tile){
         if(gameState != GameState.PLAYER_MOVE){
             throw new IllegalStateException("Le jeu n'est pas dans Player Move");
+        }
+
+        if(!paths.isAccessible(tile) || paths == null || tile == null){
+            throw new IllegalStateException("La tuile selectionne n'est pas accessible");
         }
 
         Tile tileJoueur = maze.getTile(getCurrentPlayer());
@@ -147,6 +157,7 @@ public class Game {
 
         currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
         gameState = GameState.MAZE_MOVE;
+        updatePaths();
     }
 
     public void mazeMove(MazeMove mazeMove){
@@ -156,5 +167,24 @@ public class Game {
 
         maze.move(mazeMove);
         gameState = GameState.PLAYER_MOVE;
+        updatePaths();
+    }
+
+    private void updatePaths(){
+        if(maze == null || currentPlayerIndex == -1){
+            paths = null;
+            return;
+        }
+
+        Graph<Tile> graph = new MazeToGraphAdapter().getGraph(maze);
+        Tile start = maze.getTile(getCurrentPlayer());
+        paths = new Paths<>(graph, start);
+    }
+
+    public Paths<Tile> getPaths(){
+        if(gameState == GameState.SETUP){
+            paths = null;
+        }
+        return paths;
     }
 }
