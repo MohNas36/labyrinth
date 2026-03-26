@@ -1,5 +1,9 @@
 package labyrinth.model;
 
+import labyrinth.util.observable.ObservableValue;
+import labyrinth.util.observable.SimpleObservableList;
+import labyrinth.util.observable.SimpleObservableValue;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -8,8 +12,8 @@ import java.util.Set;
 public class Tile{
     private TileKind kind;
     private Content content;
-    private Direction direction;
-    private List<Player> players = new ArrayList<Player>(4);
+    private SimpleObservableValue<Direction> direction;
+    private SimpleObservableList<Player> players = new SimpleObservableList<>();
 
     public Tile(TileKind kind) {
         this(kind, new None(), Direction.UP);
@@ -18,13 +22,13 @@ public class Tile{
     public Tile(TileKind kind, Content content) {
         this.kind = kind;
         this.content = content;
-        this.direction = Direction.UP;
+        this.direction = new SimpleObservableValue<>(Direction.UP);
     }
 
     public Tile(TileKind kind, Content content, Direction direction) {
         this.kind = kind;
         this.content = content;
-        this.direction = direction;
+        this.direction.setValue(direction);
 
     }
 
@@ -36,14 +40,18 @@ public class Tile{
         return content;
     }
 
+    public ObservableValue<Direction> orientationProperty(){
+        return direction.asReadOnly();
+    }
+
     public Direction getOrientation() {
-        return direction;
+        return direction.getValue();
     }
 
     public Set<Direction> getExits() {
         Set<Direction> exits = new HashSet<Direction>();
         for (Direction d : kind.getExits()) {
-            exits.add(d.getRotated(direction));
+            exits.add(d.getRotated(direction.getValue()));
         }
         return exits;
     }
@@ -61,6 +69,6 @@ public class Tile{
     }
 
     public void rotate(int nbTimes){
-        this.direction = direction.getRotated(nbTimes);
+        this.direction.setValue(direction.getValue().getRotated(nbTimes));
     }
 }
