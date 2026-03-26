@@ -1,23 +1,34 @@
 package labyrinth.model;
 
+import labyrinth.util.observable.ObservableList;
+import labyrinth.util.observable.SimpleObservableList;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Deck {
-    private List<Integer> drawPile;
-    private List<Integer> discardPile;
+    private SimpleObservableList<Integer> drawPile;
+    private SimpleObservableList<Integer> discardPile;
 
     public Deck() {
-        drawPile = new ArrayList<>();
-        discardPile = new ArrayList<>();
+        drawPile = new SimpleObservableList<>();
+        discardPile = new SimpleObservableList<>();
+    }
+
+    public ObservableList<Integer> drawPileProperty(){
+        return drawPile.asReadOnly();
     }
 
     public List<Integer> getDrawPile() {
-        return drawPile;
+        return drawPile.asReadOnly();
+    }
+
+    public ObservableList<Integer> discardPileProperty(){
+        return discardPile.asReadOnly();
     }
 
     public List<Integer> getDiscardPile() {
-        return discardPile;
+        return discardPile.asReadOnly();
     }
 
     public void init(List<Integer> treasures){
