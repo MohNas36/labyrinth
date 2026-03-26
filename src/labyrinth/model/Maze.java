@@ -3,17 +3,20 @@ package labyrinth.model;
 import labyrinth.util.collection.Grid;
 import labyrinth.util.*;
 import labyrinth.util.collection.Position;
+import labyrinth.util.observable.ObservableValue;
+import labyrinth.util.observable.SimpleObservableValue;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
 public class Maze {
-    private final Grid<Tile> tiles;
+    private  Grid<SimpleObservableValue<Tile>> tiles;
     private Set<Integer> fixedRows;
     private Set<Integer> fixedColumns;
-    private Tile extraTile;
-    private MazeMove mazeMove;
+    private SimpleObservableValue<Tile> extraTile;
+    private SimpleObservableValue<MazeMove> forbiddenMove = new SimpleObservableValue<>(null);
+
 
     public Maze(Grid<Tile> tiles, Tile extraTile, Set<Integer> fixedRows, Set<Integer> fixedColumns) {
         if(tiles == null || extraTile == null || fixedRows == null || fixedColumns == null) {
@@ -82,19 +85,24 @@ public class Maze {
         }
 
 
-        this.tiles = tiles;
+        this.tiles.map(SimpleObservableValue :: new);
         this.fixedRows = fixedRows;
         this.fixedColumns = fixedColumns;
-        this.extraTile = extraTile;
+        this.extraTile.setValue(extraTile);
+
+    }
+
+    public Grid<ObservableValue<Tile>> getObservableTiles(){
+        return tiles.map(SimpleObservableValue :: asReadOnly);
     }
 
     public Grid<Tile> getTiles() {
-        return tiles;
+        return tiles.map(SimpleObservableValue :: getValue );
     }
 
     public Position getPosition(Tile tile) {
-        for(Grid.Entry<Tile> entry : tiles){
-            if(entry.value().equals(tile)){
+        for(Grid.Entry<SimpleObservableValue<Tile>> entry : tiles){
+            if(entry.value().getValue().equals(tile)){
                 return entry.position();
             }
         }
@@ -109,33 +117,41 @@ public class Maze {
         return fixedColumns;
     }
 
+    public ObservableValue<Tile> extraTileProperty(){
+        return extraTile.asReadOnly();
+    }
+
     public Tile getExtraTile() {
-        return extraTile;
+        return extraTile.getValue();
     }
 
     public Tile getTile(Player p){
-        for(Grid.Entry<Tile> entry : tiles){
-            if(entry.value().getPlayers().contains(p)){
-                return entry.value();
+        for(Grid.Entry<SimpleObservableValue<Tile>> entry : tiles){
+            if(entry.value().getValue().getPlayers().contains(p)){
+                return entry.value().getValue();
             }
         }
         return null;
     }
 
     public Tile getStartingTile(Player p){
-        for(Grid.Entry<Tile> entry : tiles){
-            if(entry.value().getContent() instanceof StartingPosition s && (p.getIndex() == s.index())) {
-                return entry.value();
+        for(Grid.Entry<SimpleObservableValue<Tile>> entry : tiles){
+            if(entry.value().getValue().getContent() instanceof StartingPosition s && (p.getIndex() == s.index())) {
+                return entry.value().getValue();
             }
         }
         return null;
     }
 
+    public ObservableValue<MazeMove> forbiddenMoveProperty(){
+        return forbiddenMove.asReadOnly();
+    }
+
     public MazeMove getForbiddenMove(){
-        if(this.mazeMove == null){
+        if(this.forbiddenMove.getValue() == null){
             return null;
         }
-        return this.mazeMove.getOpposite();
+        return this.forbiddenMove.getValue().getOpposite();
     }
 
     public void move(MazeMove mazeMove){
@@ -163,42 +179,42 @@ public class Maze {
             throw new IllegalArgumentException("Déplacement interdit");
         }
 
-        Tile expelled = this.extraTile;
-        Tile oldExtra = this.extraTile;
+        Tile expelled = this.extraTile.getValue();
+        SimpleObservableValue<Tile> oldExtra = this.extraTile;
 
         switch (direction) {
             case RIGHT ->
                 {
-                expelled = this.tiles.get(index, tiles.getWidth() - 1);
+                expelled = this.tiles.get(index, tiles.getWidth() - 1).getValue();
                     for (int i = tiles.getWidth() - 1; i > 0; i--) {
                         this.tiles.set(index, i, this.tiles.get(index, i + 1));
                     }
                     this.tiles.set(index, 0, oldExtra);
-                    this.extraTile = expelled;
+                    this.extraTile.setValue(expelled);
                 }
             case LEFT -> {
-                expelled = this.tiles.get(index, 0);
+                expelled = this.tiles.get(index, 0).getValue();
                 for (int i = 0; i < tiles.getWidth() - 1; i++) {
                     this.tiles.set(index, i, this.tiles.get(index, i - 1));
                 }
                 this.tiles.set(index, tiles.getWidth() - 1, oldExtra);
-                this.extraTile = expelled;
+                this.extraTile.setValue(expelled);
             }
             case DOWN -> {
-                expelled = this.tiles.get(tiles.getHeight() - 1, index);
+                expelled = this.tiles.get(tiles.getHeight() - 1, index).getValue();
                 for (int i = tiles.getHeight() - 1; i > 0; i--) {
                     this.tiles.set(i, index, tiles.get(i - 1, index));
                 }
                 this.tiles.set(0, index, oldExtra);
-                this.extraTile = expelled;
+                this.extraTile.setValue(expelled);
             }
             case UP -> {
-                expelled = this.tiles.get(0, index);
+                expelled = this.tiles.get(0, index).getValue();
                 for (int i = 0; i < tiles.getHeight() - 1; i++) {
                     this.tiles.set(i, index, this.tiles.get(i + 1, index));
                 }
                 this.tiles.set(this.tiles.getHeight() - 1, index, oldExtra);
-                this.extraTile = expelled;
+                this.extraTile.setValue(expelled);
             }
             default -> {
                 throw new IllegalArgumentException("Direction Invalide");
@@ -206,9 +222,10 @@ public class Maze {
         }
         if(expelled.getPlayers() != null ){
             for(Player p : expelled.getPlayers()){
-                this.extraTile.removePlayer(p);
-                oldExtra.addPlayer(p);
+                this.extraTile.getValue().removePlayer(p);
+                oldExtra.getValue().addPlayer(p);
             }
         }
     }
+
 }
