@@ -1,8 +1,11 @@
 package labyrinth.model;
 
+import labyrinth.util.observable.ObservableValue;
+import labyrinth.util.observable.SimpleObservableValue;
+
 public class Slot {
     private int index;
-    private Player p;
+    private SimpleObservableValue<Player> p;
     private Game game;
 
     public Slot(Game game, int index){
@@ -15,7 +18,11 @@ public class Slot {
     }
 
     public Player getPlayer(){
-        return p;
+        return p.getValue();
+    }
+
+    public ObservableValue<Player> playerProperty(){
+        return p.asReadOnly();
     }
 
     public void open(){
@@ -25,16 +32,16 @@ public class Slot {
         if(p != null){
             throw new IllegalStateException("Le slot contient déja un joueur");
         }
-        this.p = new Player(index);
+        this.p.setValue(new Player(index));
     }
 
     public void close(){
         if(game.getGameState() != GameState.SETUP){
             throw new IllegalStateException("Le jeu n'est pas dans SETUP");
         }
-        if(p == null){
+        if(p.getValue() == null){
             throw new IllegalStateException("Le slot ne contient pas de joueur");
         }
-        this.p = null;
+        this.p.setValue(null);
     }
 }
