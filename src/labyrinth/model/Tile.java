@@ -1,5 +1,6 @@
 package labyrinth.model;
 
+import labyrinth.util.observable.ObservableList;
 import labyrinth.util.observable.ObservableValue;
 import labyrinth.util.observable.SimpleObservableList;
 import labyrinth.util.observable.SimpleObservableValue;
@@ -56,8 +57,12 @@ public class Tile{
         return exits;
     }
 
+    public ObservableList<Player> playersProperty(){
+        return players.asReadOnly();
+    }
+
     public List<Player> getPlayers() {
-        return players;
+        return players.asReadOnly();
     }
 
     public void addPlayer(Player player) {
