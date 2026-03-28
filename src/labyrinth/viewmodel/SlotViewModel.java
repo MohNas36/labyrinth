@@ -10,5 +10,9 @@ public interface SlotViewModel {
     void magnetize();
     void demagnetize();
     void mazeMove();
-   ObservableValue<Boolean> activeProperty();
+    ObservableValue<Boolean> activeProperty();
+    Boolean isActive();
+    Boolean isForbidden();
+    Boolean isMagnetized();
+    TileViewModel getExtraTileViewModel();
 }

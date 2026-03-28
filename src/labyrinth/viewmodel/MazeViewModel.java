@@ -15,6 +15,8 @@ public interface MazeViewModel {
     void rotateExtraTile(int nbTimes);
     Map<MazeMove , SlotViewModel> getSlotViewModels();
     ObjectProperty<MazeMove> forbiddenMoveProperty();
+    MazeMove getForbiddenMove();
+    GameState getGameState();
     ObservableValue<GameState> stateProperty();
 
 }

@@ -14,4 +14,7 @@ public interface GameViewModel {
    List<PlayerViewModel> getPlayersViewModel();
    ObservableValue<GameState> stateProperty();
    void startGame();
+   MenuViewModel getMenuViewModel();
+   ObservableValue<Integer> currentPlayerProperty();
+   int getCurrentPlayer();
 }
