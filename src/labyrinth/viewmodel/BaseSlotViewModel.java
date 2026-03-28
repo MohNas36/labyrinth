@@ -12,11 +12,12 @@ public class BaseSlotViewModel implements SlotViewModel{
     private BooleanProperty forbiddenMove = new SimpleBooleanProperty(false);
     private ObjectProperty<MazeMove> forbiddenMoveProperty;
     private BooleanProperty active = new SimpleBooleanProperty();
+    private TileViewModel extraTileView;
 
-    public BaseSlotViewModel(MazeMove mazeMove , ObjectProperty<MazeMove> forbiddenMoveProperty , ObjectProperty<GameState> state){
+    public BaseSlotViewModel(MazeMove mazeMove , ObjectProperty<MazeMove> forbiddenMoveProperty , ObjectProperty<GameState> state, BaseTileViewModel extraTileView ){
         this.mazeMove = mazeMove;
         this.forbiddenMoveProperty = forbiddenMoveProperty;
-
+        this.extraTileView = extraTileView;
         forbiddenMoveProperty.addListener(((observable, oldMove , NewMove) ->{
             forbiddenMove.set(mazeMove.equals(NewMove));
             if(forbiddenMove.get()){
@@ -76,5 +77,25 @@ public class BaseSlotViewModel implements SlotViewModel{
     @Override
     public ObservableValue<Boolean> activeProperty() {
         return active;
+    }
+
+    @Override
+    public Boolean isActive() {
+        return active.get();
+    }
+
+    @Override
+    public Boolean isForbidden() {
+        return forbiddenMove.get();
+    }
+
+    @Override
+    public Boolean isMagnetized() {
+        return magnetized.getValue();
+    }
+
+    @Override
+    public TileViewModel getExtraTileViewModel() {
+        return extraTileView ;
     }
 }
