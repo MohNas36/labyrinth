@@ -60,10 +60,10 @@ public class BaseMazeViewModel implements MazeViewModel{
             MazeMove down = new MazeMove(Direction.DOWN , i);
             MazeMove left = new MazeMove(Direction.LEFT , i);
 
-            slots.put(up , new BaseSlotViewModel(up , forbiddenMove , state));
-            slots.put(right , new BaseSlotViewModel(right, forbiddenMove , state));
-            slots.put(down, new BaseSlotViewModel(down, forbiddenMove, state));
-            slots.put(left , new BaseSlotViewModel(left , forbiddenMove, state));
+            slots.put(up , new BaseSlotViewModel(up , forbiddenMove , state , ExtraTile));
+            slots.put(right , new BaseSlotViewModel(right, forbiddenMove , state , ExtraTile));
+            slots.put(down, new BaseSlotViewModel(down, forbiddenMove, state , ExtraTile));
+            slots.put(left , new BaseSlotViewModel(left , forbiddenMove, state , ExtraTile));
 
         }
     }
@@ -115,6 +115,16 @@ public class BaseMazeViewModel implements MazeViewModel{
     @Override
     public ObjectProperty<MazeMove> forbiddenMoveProperty(){
         return this.forbiddenMove;
+    }
+
+    @Override
+    public MazeMove getForbiddenMove() {
+        return forbiddenMove.get();
+    }
+
+    @Override
+    public GameState getGameState() {
+        return state.get();
     }
 
     @Override
