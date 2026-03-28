@@ -19,6 +19,11 @@ public class BaseMenuViewModel implements MenuViewModel{
     }
 
     @Override
+    public void showAbout() {
+        System.out.println("About");
+    }
+
+    @Override
     public void exit() {
         Platform.exit();
     }
