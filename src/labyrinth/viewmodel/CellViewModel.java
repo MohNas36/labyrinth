@@ -1,5 +1,6 @@
 package labyrinth.viewmodel;
 
+
 import javafx.beans.property.BooleanProperty;
 import labyrinth.util.collection.Position;
 

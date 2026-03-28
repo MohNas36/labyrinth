@@ -31,7 +31,7 @@ public class BaseMazeViewModel implements MazeViewModel{
                 cellViewModels.set(x , y , new BaseCellViewModel(new Position( x , y ) , state));
             }
         }
-
+/*
         cellViewModels.set(0 , 0 , new BaseCellViewModel(new Position(0 , 0) , new BaseTileViewModel(TileKind.ELBOW , Direction.RIGHT , 0 ,null , null , null ) , state));
         cellViewModels.set(0 , 6 , new BaseCellViewModel(new Position(0 , 6) , new BaseTileViewModel(TileKind.ELBOW , Direction.UP , 1 , null, null, null) , state));
         cellViewModels.set(6 , 0 , new BaseCellViewModel(new Position(6 , 0) , new BaseTileViewModel(TileKind.ELBOW , Direction.DOWN , 2 , null, null, null), state));
@@ -49,7 +49,7 @@ public class BaseMazeViewModel implements MazeViewModel{
 
         cellViewModels.set(1 , 1 , new BaseCellViewModel(new Position(1 , 1) , new BaseTileViewModel(TileKind.T_CROSS , Direction.DOWN , null, null , listJoueurs, 2), state));
 
-
+*/
 
         ExtraTile = new BaseTileViewModel();
 
