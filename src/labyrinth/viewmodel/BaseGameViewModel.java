@@ -15,6 +15,7 @@ public class BaseGameViewModel implements GameViewModel {
     private ObjectProperty<Integer> currentPlayerId = new SimpleObjectProperty(0);
     private List<PlayerViewModel> playerViewModels;
     private ObjectProperty<GameState> state = new SimpleObjectProperty<>(GameState.SETUP);
+    private MenuViewModel menuViewModel;
 
     public BaseGameViewModel(){
         this.playerViewModels = new ArrayList<>();
@@ -23,6 +24,7 @@ public class BaseGameViewModel implements GameViewModel {
         this.playerViewModels.add(new BasePlayerViewModel(1, state));
         this.playerViewModels.add(new BasePlayerViewModel(2, state));
         this.playerViewModels.add(new BasePlayerViewModel(3, state));
+        menuViewModel = new BaseMenuViewModel();
     }
 
     public void setTitle(String title){
@@ -68,5 +70,20 @@ public class BaseGameViewModel implements GameViewModel {
         if (state.get() == GameState.SETUP) {
             this.state.set(GameState.MAZE_MOVE);
         }
+    }
+
+    @Override
+    public MenuViewModel getMenuViewModel() {
+        return menuViewModel;
+    }
+
+    @Override
+    public ObservableValue<Integer> currentPlayerProperty() {
+        return currentPlayerId;
+    }
+
+    @Override
+    public int getCurrentPlayer() {
+        return currentPlayerId.get();
     }
 }
