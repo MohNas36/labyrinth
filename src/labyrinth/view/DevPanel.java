@@ -16,19 +16,19 @@ public class DevPanel extends VBox {
 
 
 
-    public DevPanel(StubGameViewModel stubGameViewModel , StubTileViewModel stubTileViewModel , StubCellViewModel stubCellViewModel , StubMenuViewModel stubMenuViewModel){
+    public DevPanel(BaseGameViewModel BaseGameViewModel , BaseTileViewModel BaseTileViewModel , BaseCellViewModel BaseCellViewModel , BaseMenuViewModel BaseMenuViewModel){
         this.text = new TextField();
         this.titre = new Button("Changer le titre");
         this.rotateAll = new Button("Rotate all");
         this.randomize = new Button("Randomize");
-        this.mazeView = new MazeView(stubGameViewModel.getStubMazeViewModel());
-        this.gameView = new GameView(stubGameViewModel);
-        this.mainView = new MainView(stubGameViewModel , stubMenuViewModel );
+        this.mazeView = new MazeView(BaseGameViewModel.getBaseMazeViewModel());
+        this.gameView = new GameView(BaseGameViewModel);
+        this.mainView = new MainView(BaseGameViewModel , BaseMenuViewModel );
 
-        titre.setOnAction(event -> stubGameViewModel.setTitle(text.getText()));
+        titre.setOnAction(event -> BaseGameViewModel.setTitle(text.getText()));
 
-        this.randomize.setOnAction(event -> stubGameViewModel.getStubMazeViewModel().randomize());
-        this.rotateAll.setOnAction(event -> stubGameViewModel.getStubMazeViewModel().rotateAll(1));
+        this.randomize.setOnAction(event -> BaseGameViewModel.getBaseMazeViewModel().randomize());
+        this.rotateAll.setOnAction(event -> BaseGameViewModel.getBaseMazeViewModel().rotateAll(1));
 
         this.getChildren().addAll(mainView/*text, titre, randomize , rotateAll , */);
 
