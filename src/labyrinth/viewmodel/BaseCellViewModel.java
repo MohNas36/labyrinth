@@ -61,4 +61,9 @@ public class BaseCellViewModel implements CellViewModel{
     public void movePlayer() {
         System.out.println("Mouvement du joueur vers : " + position);
     }
+
+    @Override
+    public boolean isActive() {
+        return active.get();
+    }
 }

@@ -5,4 +5,5 @@ public interface MenuViewModel {
     void load();
     void save();
     void exit();
+    void showAbout();
 }
