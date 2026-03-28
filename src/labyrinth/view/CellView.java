@@ -8,7 +8,7 @@ public class CellView extends TileView{
         super(viewModel.getTileViewModel());
 
         setOnMouseClicked(e -> {
-            if(viewModel.activeProperty().get()){
+            if(viewModel.activeProperty().getValue()){
                 viewModel.movePlayer();
             }
         });

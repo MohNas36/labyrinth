@@ -5,11 +5,13 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import labyrinth.model.GameState;
 import labyrinth.util.collection.Position;
+import labyrinth.util.observable.ObservableValue;
+import labyrinth.util.observable.SimpleObservableValue;
 
 public class BaseCellViewModel implements CellViewModel{
     private Position position;
     private BaseTileViewModel ViewModel;
-    private BooleanProperty active = new SimpleBooleanProperty(false);
+    private SimpleObservableValue<Boolean> active = new SimpleObservableValue<>(false);
     private ObjectProperty<GameState> state;
 
     public BaseCellViewModel(Position position , BaseTileViewModel viewModel , ObjectProperty<GameState> state){
@@ -18,16 +20,16 @@ public class BaseCellViewModel implements CellViewModel{
         this.state = state;
 
         if (state.get() == GameState.PLAYER_MOVE){
-            active.set(true);
+            active.setValue(true);
         }else {
-            active.set(false);
+            active.setValue(false);
         }
 
         state.addListener((obs , oldVal , newVal) ->{
             if(newVal == GameState.PLAYER_MOVE){
-                active.set(true);
+                active.setValue(true);
             }else{
-                active.set(false);
+                active.setValue(false);
             }
         });
 
@@ -53,7 +55,7 @@ public class BaseCellViewModel implements CellViewModel{
     }
 
     @Override
-    public BooleanProperty activeProperty() {
+    public ObservableValue<Boolean> activeProperty() {
         return active;
     }
 
@@ -64,6 +66,6 @@ public class BaseCellViewModel implements CellViewModel{
 
     @Override
     public boolean isActive() {
-        return active.get();
+        return active.getValue();
     }
 }
