@@ -31,7 +31,7 @@ public interface PlayerViewModel {
 
     OptionalInt getNextTreasure();
 
-    ObservableList<Integer> foundTreasuresProperty();
+    ObservableList<Integer> foundTreasureProperty();
 
     List<Integer> getFoundTreasures();
 

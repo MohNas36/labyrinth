@@ -107,7 +107,7 @@ public class BasePlayerViewModel implements PlayerViewModel{
     }
 
     @Override
-    public ObservableList<Integer> foundTreasuresProperty() {
+    public ObservableList<Integer> foundTreasureProperty() {
         return foundTreasures;
     }
 
