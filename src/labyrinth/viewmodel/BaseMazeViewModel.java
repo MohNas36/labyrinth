@@ -33,7 +33,7 @@ public class BaseMazeViewModel implements MazeViewModel{
         for(int x = 0 ; x < 7 ; x++){
             for (int y = 0 ; y < 7 ; y++){
                 Tile t = grid.get(x, y);
-                this.cellViewModels.set(x , y , new BaseCellViewModel(new Position( x , y ), tile, state));
+                this.cellViewModels.set(x , y , new BaseCellViewModel(new Position( x , y ), game, t));
             }
         }
 
