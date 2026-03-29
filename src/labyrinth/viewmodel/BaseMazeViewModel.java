@@ -3,55 +3,46 @@ package labyrinth.viewmodel;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
-import labyrinth.model.Direction;
-import labyrinth.model.GameState;
-import labyrinth.model.MazeMove;
-import labyrinth.model.TileKind;
+import labyrinth.model.*;
 import labyrinth.util.collection.ArrayGrid;
 import labyrinth.util.collection.Grid;
 import labyrinth.util.collection.Position;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BaseMazeViewModel implements MazeViewModel{
+    private final Game game;
     private Grid<CellViewModel> cellViewModels;
-    private BaseTileViewModel ExtraTile;
+    private BaseTileViewModel extraTile;
     private Map<MazeMove, SlotViewModel> slots;
-    private ObjectProperty<MazeMove> forbiddenMove = new SimpleObjectProperty<>(null);
-    private ObjectProperty<GameState> state;
+    private final ObjectProperty<MazeMove> forbiddenMove = new SimpleObjectProperty<>(null);
+    private final ObjectProperty<GameState> state = new SimpleObjectProperty<>(GameState.SETUP);
 
-    public BaseMazeViewModel(ObjectProperty<GameState> state){
-        this.state = state;
-        cellViewModels = new ArrayGrid<>(7 , 7);
+    public BaseMazeViewModel(Game game) {
+        this.game = game;
+        this.state.set(game.getState());
+
+        game.stateProperty().addListener((obs, oldState, newState) -> {
+            this.state.set(newState);
+        });
+
+        Grid<Tile> grid = game.getMaze().getTiles();
+        this.cellViewModels = new ArrayGrid<>(grid.getHeight(), grid.getWidth());
 
         for(int x = 0 ; x < 7 ; x++){
             for (int y = 0 ; y < 7 ; y++){
-                cellViewModels.set(x , y , new BaseCellViewModel(new Position( x , y ) , state));
+                Tile t = grid.get(x, y);
+                this.cellViewModels.set(x , y , new BaseCellViewModel(new Position( x , y ), tile, state));
             }
         }
-/*
-        cellViewModels.set(0 , 0 , new BaseCellViewModel(new Position(0 , 0) , new BaseTileViewModel(TileKind.ELBOW , Direction.RIGHT , 0 ,null , null , null ) , state));
-        cellViewModels.set(0 , 6 , new BaseCellViewModel(new Position(0 , 6) , new BaseTileViewModel(TileKind.ELBOW , Direction.UP , 1 , null, null, null) , state));
-        cellViewModels.set(6 , 0 , new BaseCellViewModel(new Position(6 , 0) , new BaseTileViewModel(TileKind.ELBOW , Direction.DOWN , 2 , null, null, null), state));
-        cellViewModels.set(6, 6 , new BaseCellViewModel(new Position(6 , 6) , new BaseTileViewModel(TileKind.ELBOW , Direction.LEFT , 3 , null, null, null), state));
 
-        cellViewModels.set(2 , 3 , new BaseCellViewModel(new Position(2 , 3) , new BaseTileViewModel(TileKind.T_CROSS , Direction.UP , null , 0, null, null ), state));
-        cellViewModels.set(4 , 4 , new BaseCellViewModel(new Position(4, 4) , new BaseTileViewModel(TileKind.T_CROSS , Direction.UP , null , 1 ,null, null), state));
-        cellViewModels.set(5 , 5 , new BaseCellViewModel(new Position(5 , 5) , new BaseTileViewModel(TileKind.T_CROSS , Direction.UP , null , 2 , null, null), state));
-        cellViewModels.set(6  , 3 , new BaseCellViewModel(new Position(6 , 3) , new BaseTileViewModel(TileKind.T_CROSS , Direction.UP , null , 3 , null, null), state));
+        this.extraTile = new BaseTileViewModel(game.getMaze().getExtraTile(), game);
 
-        ArrayList<Integer> listJoueurs = new ArrayList<>();
-        listJoueurs.add(1);
-        listJoueurs.add(2);
-        listJoueurs.add(3);
-
-        cellViewModels.set(1 , 1 , new BaseCellViewModel(new Position(1 , 1) , new BaseTileViewModel(TileKind.T_CROSS , Direction.DOWN , null, null , listJoueurs, 2), state));
-
-*/
-
-        ExtraTile = new BaseTileViewModel();
+        this.forbiddenMove.set(game.getMaze().getForbiddenMove());
+        game.getMaze().forbiddenMoveProperty().addListener((obs, oldForbiddenMove, newForbiddenMove) -> {
+            this.forbiddenMove.set(newForbiddenMove);
+        });
 
         slots = new HashMap<>();
         for(int i = 1 ; i < 7 ; i += 2){
@@ -60,10 +51,10 @@ public class BaseMazeViewModel implements MazeViewModel{
             MazeMove down = new MazeMove(Direction.DOWN , i);
             MazeMove left = new MazeMove(Direction.LEFT , i);
 
-            slots.put(up , new BaseSlotViewModel(up , forbiddenMove , state , ExtraTile));
-            slots.put(right , new BaseSlotViewModel(right, forbiddenMove , state , ExtraTile));
-            slots.put(down, new BaseSlotViewModel(down, forbiddenMove, state , ExtraTile));
-            slots.put(left , new BaseSlotViewModel(left , forbiddenMove, state , ExtraTile));
+            slots.put(up , new BaseSlotViewModel(game, up, forbiddenMove, state, extraTile));
+            slots.put(right , new BaseSlotViewModel(game, right, forbiddenMove, state, extraTile));
+            slots.put(down, new BaseSlotViewModel(game, down, forbiddenMove, state, extraTile));
+            slots.put(left , new BaseSlotViewModel(game, left, forbiddenMove, state, extraTile));
 
         }
     }
@@ -99,12 +90,12 @@ public class BaseMazeViewModel implements MazeViewModel{
 
     @Override
     public TileViewModel getExtraTileViewModel(){
-        return this.ExtraTile;
+        return this.extraTile;
     }
 
     @Override
     public void rotateExtraTile(int nbTimes){
-        this.ExtraTile.rotate(nbTimes);
+        this.extraTile.rotate(nbTimes);
     }
 
     @Override
