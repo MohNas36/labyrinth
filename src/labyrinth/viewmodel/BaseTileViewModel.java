@@ -5,33 +5,67 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import labyrinth.model.Direction;
-import labyrinth.model.TileKind;
+import labyrinth.model.*;
 
 import java.util.List;
 import java.util.OptionalInt;
 
 public class BaseTileViewModel implements TileViewModel{
+    private final Game game;
+    private final Tile tile;
+
     private final Property<TileKind> kind;
     private final Property<Direction> direction;
     private final Property<Integer> startingPosition;
     private final Property<Integer> treasure;
     private final ObservableList<Integer> players;
     private final Property<Integer> currentPlayer;
-    public BaseTileViewModel(TileKind kind , Direction direction , Integer sp , Integer treasure , List<Integer> playersList , Integer current){
-        this.kind = new SimpleObjectProperty<>(kind);
-        this.direction = new SimpleObjectProperty<>(direction);
-        this.startingPosition = new SimpleObjectProperty<>(sp);
-        this.treasure = new SimpleObjectProperty<>(treasure);
+
+    public BaseTileViewModel(Tile tile, Game game) {
+        this.game = game;
+        this.tile = tile;
+
+        this.kind = new SimpleObjectProperty<>(this.tile.getKind());
+        this.direction = new SimpleObjectProperty<>(this.tile.getOrientation());
+        this.startingPosition = new SimpleObjectProperty<>(getStartPos(tile));
+        this.treasure = new SimpleObjectProperty<>(getTrsr(tile));
         players = FXCollections.observableArrayList();
-        if(playersList != null){
-            this.players.addAll(playersList);
+        currentPlayer = new SimpleObjectProperty<>(game.getCurrentPlayer().getIndex());
+
+        players.clear();
+        for(Player p : tile.getPlayers()) {
+            players.add(p.getIndex());
         }
-        currentPlayer = new SimpleObjectProperty<>(current);
+
+        tile.orientationProperty().addListener((observable, oldValue, newValue) -> {
+            this.direction.setValue(newValue);
+        });
+
+        tile.playersProperty().addListener(observable -> {
+            players.clear();
+            for(Player p : tile.getPlayers()) {
+                players.add(p.getIndex());
+            }
+        });
+
+        game.currentPlayerProperty().addListener((obs, oldVal, newVal) -> {
+            this.currentPlayer.setValue(game.getCurrentPlayer().getIndex());
+        });
+
     }
 
-    public BaseTileViewModel(){
-        this(TileKind.CORRIDOR , Direction.UP , null , null , null, null);
+    private Integer getStartPos(Tile tile) {
+        if(tile.getContent() instanceof StartingPosition sp){
+            return sp.index();
+        }
+        return null;
+    }
+
+    private Integer getTrsr(Tile tile) {
+        if(tile.getContent() instanceof Treasure tr){
+            return tr.id();
+        }
+        return null;
     }
 
     public void setKind(TileKind kind) {
