@@ -2,6 +2,7 @@ package labyrinth;
 
 import labyrinth.model.*;
 import labyrinth.util.collection.Grid;
+import labyrinth.util.graph.Paths;
 
 import java.util.Scanner;
 
@@ -16,10 +17,11 @@ public class LabyrinthCLI {
         Game game = new Game();
         game.init();
         Grid<Tile> grid = game.getMaze().getTiles();
+        Paths<Tile> paths = game.getPaths();
+        System.out.println(game.getGameState());
+
 
         while(game.getGameState() != GameState.GAME_OVER){
-            System.out.println(game.getGameState());
-
             Scanner s2 = new Scanner(System.in);
             System.out.println("Entrer le nombre de rotation à la tuile courante");
             int rotation = s2.nextInt();
@@ -50,6 +52,13 @@ public class LabyrinthCLI {
 
             System.out.println(game.getGameState());
 
+            for (Grid.Entry<Tile> entry : game.getMaze().getTiles()) {
+                Tile t = entry.value();
+                if (paths.isAccessible(t)) {
+                    System.out.println("Tuile accessible : " + entry.position());
+                }
+            }
+
             Scanner s5 = new Scanner(System.in);
             Scanner s6 = new Scanner(System.in);
             System.out.println("Entrer le deplacement du joueur x et y (que (1,1) pour l'instant)");
@@ -57,7 +66,9 @@ public class LabyrinthCLI {
             int dy = s6.nextInt();
 
             game.movePlayer(grid.get(dx, dy));
-            game.endTurn();
+            if (game.getGameState() == GameState.TURN_END) {
+                game.endTurn();
+            }
 
             System.out.println(game.getGameState());
 
