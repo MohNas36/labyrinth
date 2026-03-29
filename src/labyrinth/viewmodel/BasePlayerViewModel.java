@@ -5,13 +5,18 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
+import labyrinth.model.Game;
 import labyrinth.model.GameState;
+import labyrinth.model.Player;
+import labyrinth.model.Slot;
 
 import java.util.List;
 import java.util.OptionalInt;
 
 public class BasePlayerViewModel implements PlayerViewModel{
     private int index;
+    private Game game;
+
     private BooleanProperty isActive;
     private StringProperty name;
     private ObjectProperty<Image> picture;
@@ -20,8 +25,10 @@ public class BasePlayerViewModel implements PlayerViewModel{
     private ObservableList<Integer> foundTreasures;
     private BooleanProperty isLocked;
 
-    public BasePlayerViewModel(int index, ObjectProperty<GameState> state) {
+    public BasePlayerViewModel(Game game, int index) {
+        this.game = game;
         this.index = index;
+
         this.isActive = new SimpleBooleanProperty(false);
         this.name = new SimpleStringProperty("Libre");
         this.picture = new SimpleObjectProperty<>(null);
@@ -30,19 +37,56 @@ public class BasePlayerViewModel implements PlayerViewModel{
         this.foundTreasures = FXCollections.observableArrayList();
         this.isLocked = new SimpleBooleanProperty(false);
 
-        if(state.get() == GameState.SETUP){
-            isLocked.set(false);
+        this.isLocked.set(game.getGameState() == GameState.SETUP);
+
+        refresh();
+
+        game.stateProperty().addListener((obs, oldVal, newVal) -> {
+            isLocked.set(newVal != GameState.SETUP);
+            refresh();
+        });
+
+        game.currentPlayerProperty().addListener((obs, oldVal, newVal) -> {
+            refreshPlayer();
+        });
+    }
+
+    private void refresh(){
+        Slot slot = game.getSlot(index);
+
+        if(game.getState() == GameState.SETUP) {
+            isActive.set(false);
         }else{
-            isLocked.set(true);
+            isActive.set(true);
         }
 
-        state.addListener((obs, oldVal, newVal) -> {
-            if(newVal == GameState.SETUP){
-                isLocked.set(false);
-            }else{
-                isLocked.set(true);
-            }
-        });
+        refreshPlayer();
+        refreshTreasure();
+    }
+
+    private void refreshPlayer(){
+        Player p = game.getCurrentPlayer();
+        currentPlayer.set(index == p.getIndex());
+    }
+
+    private void refreshTreasure(){
+        foundTreasures.clear();
+
+        Slot slot = game.getSlot(index);
+        if(slot.getPlayer() == null){
+            nextTreasure.set(null);
+            return;
+        }
+
+        Player p = slot.getPlayer();
+
+        if(p.getDeck().getDrawPile().isEmpty()){
+            nextTreasure.set(null);
+        }else{
+            nextTreasure.set(p.getDeck().getDrawPile().get(0));
+        }
+
+        foundTreasures.addAll(p.getDeck().getDiscardPile());
     }
 
     @Override

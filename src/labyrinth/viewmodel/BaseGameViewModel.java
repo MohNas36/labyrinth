@@ -23,10 +23,10 @@ public class BaseGameViewModel implements GameViewModel {
         this.game = game;
         this.playerViewModels = new ArrayList<>();
         mazeViewModel = new BaseMazeViewModel(game);
-        this.playerViewModels.add(new BasePlayerViewModel(0 , state));
-        this.playerViewModels.add(new BasePlayerViewModel(1, state));
-        this.playerViewModels.add(new BasePlayerViewModel(2, state));
-        this.playerViewModels.add(new BasePlayerViewModel(3, state));
+        this.playerViewModels.add(new BasePlayerViewModel(game, 0));
+        this.playerViewModels.add(new BasePlayerViewModel(game, 1));
+        this.playerViewModels.add(new BasePlayerViewModel(game, 2));
+        this.playerViewModels.add(new BasePlayerViewModel(game, 3));
         menuViewModel = new BaseMenuViewModel();
     }
 
