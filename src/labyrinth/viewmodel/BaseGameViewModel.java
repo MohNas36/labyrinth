@@ -4,6 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import labyrinth.model.Game;
 import labyrinth.model.GameState;
 
 import java.util.ArrayList;
@@ -16,10 +17,12 @@ public class BaseGameViewModel implements GameViewModel {
     private List<PlayerViewModel> playerViewModels;
     private ObjectProperty<GameState> state = new SimpleObjectProperty<>(GameState.SETUP);
     private MenuViewModel menuViewModel;
+    private final Game game;
 
-    public BaseGameViewModel(){
+    public BaseGameViewModel(Game game) {
+        this.game = game;
         this.playerViewModels = new ArrayList<>();
-        mazeViewModel = new BaseMazeViewModel(state);
+        mazeViewModel = new BaseMazeViewModel(game);
         this.playerViewModels.add(new BasePlayerViewModel(0 , state));
         this.playerViewModels.add(new BasePlayerViewModel(1, state));
         this.playerViewModels.add(new BasePlayerViewModel(2, state));
