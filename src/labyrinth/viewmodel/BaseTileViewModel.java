@@ -51,7 +51,6 @@ public class BaseTileViewModel implements TileViewModel{
         game.currentPlayerProperty().addListener((obs, oldVal, newVal) -> {
             this.currentPlayer.setValue(game.getCurrentPlayer().getIndex());
         });
-
     }
 
     private Integer getStartPos(Tile tile) {

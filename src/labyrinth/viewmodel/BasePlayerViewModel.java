@@ -184,16 +184,19 @@ public class BasePlayerViewModel implements PlayerViewModel{
     @Override
     public void addPlayer() {
         isActive.set(true);
+        name.set("Joueur " + index);
     }
 
     @Override
     public void addBot() {
         isActive.set(true);
+        name.set("Bot " + index);
     }
 
     @Override
     public void removePlayer() {
         isActive.set(false);
+        name.set("Libre");
     }
 }
 

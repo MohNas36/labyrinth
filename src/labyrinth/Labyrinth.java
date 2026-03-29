@@ -13,6 +13,7 @@ public class Labyrinth extends Application {
     @Override
     public void start(Stage primaryStage) {
         Game game = new Game();
+        game.init();
         BaseGameViewModel viewModel = new BaseGameViewModel(game);
         BaseMenuViewModel menuViewModel = new BaseMenuViewModel();
         /*StubTileViewModel tileViewModel = new StubTileViewModel();
@@ -34,6 +35,5 @@ public class Labyrinth extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }
 

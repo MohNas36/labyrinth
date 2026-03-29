@@ -61,6 +61,11 @@ public class BaseCellViewModel implements CellViewModel{
 
     @Override
     public void movePlayer() {
+        Tile t = game.getMaze().getTiles().get(position.x(), position.y());
+        game.movePlayer(t);
+        if(game.getGameState() == GameState.TURN_END){
+            game.endTurn();
+        }
         System.out.println("Mouvement du joueur vers : " + position);
     }
 

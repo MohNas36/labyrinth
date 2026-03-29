@@ -154,7 +154,6 @@ public class Game {
         }else{
             this.gameState.setValue(GameState.TURN_END);
         }
-
     }
 
     public void endTurn(){
