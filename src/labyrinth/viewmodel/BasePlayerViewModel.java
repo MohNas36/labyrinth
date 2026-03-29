@@ -49,6 +49,17 @@ public class BasePlayerViewModel implements PlayerViewModel{
         game.currentPlayerProperty().addListener((obs, oldVal, newVal) -> {
             refreshPlayer();
         });
+
+        Player player = game.getCurrentPlayer();
+
+        player.getDeck().drawPileProperty().addListener(observable -> {
+            refreshTreasure();
+        });
+
+        player.getDeck().discardPileProperty().addListener(observable -> {
+            refreshTreasure();
+        });
+
     }
 
     private void refresh(){
@@ -83,7 +94,7 @@ public class BasePlayerViewModel implements PlayerViewModel{
         if(p.getDeck().getDrawPile().isEmpty()){
             nextTreasure.set(null);
         }else{
-            nextTreasure.set(p.getDeck().getDrawPile().get(0));
+            nextTreasure.set(p.getDeck().getDrawPile().getFirst());
         }
 
         foundTreasures.addAll(p.getDeck().getDiscardPile());

@@ -3,7 +3,6 @@ package labyrinth.model;
 import labyrinth.util.observable.ObservableList;
 import labyrinth.util.observable.SimpleObservableList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Deck {
