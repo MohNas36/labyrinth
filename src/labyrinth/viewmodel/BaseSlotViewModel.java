@@ -2,11 +2,13 @@ package labyrinth.viewmodel;
 
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
+import labyrinth.model.Game;
 import labyrinth.model.GameState;
 import labyrinth.model.MazeMove;
 
 public class BaseSlotViewModel implements SlotViewModel{
 
+    private Game game;
     private MazeMove mazeMove;
     private Property<Boolean> magnetized = new SimpleObjectProperty<>(false);
     private BooleanProperty forbiddenMove = new SimpleBooleanProperty(false);
@@ -14,10 +16,13 @@ public class BaseSlotViewModel implements SlotViewModel{
     private BooleanProperty active = new SimpleBooleanProperty();
     private TileViewModel extraTileView;
 
-    public BaseSlotViewModel(MazeMove mazeMove , ObjectProperty<MazeMove> forbiddenMoveProperty , ObjectProperty<GameState> state, BaseTileViewModel extraTileView ){
+    public BaseSlotViewModel(Game game, MazeMove mazeMove , ObjectProperty<MazeMove> forbiddenMoveProperty , ObjectProperty<GameState> state, BaseTileViewModel extraTileView ){
+        this.game = game;
         this.mazeMove = mazeMove;
         this.forbiddenMoveProperty = forbiddenMoveProperty;
         this.extraTileView = extraTileView;
+        this.forbiddenMove.set(mazeMove.equals(forbiddenMoveProperty.get()));
+
         forbiddenMoveProperty.addListener(((observable, oldMove , NewMove) ->{
             forbiddenMove.set(mazeMove.equals(NewMove));
             if(forbiddenMove.get()){
@@ -25,21 +30,14 @@ public class BaseSlotViewModel implements SlotViewModel{
             }
         }));
 
-        if(state.get() == GameState.MAZE_MOVE){
-            active.set(true);
-        }else{
-            active.set(false);
-        }
+        active.set(state.get() == GameState.MAZE_MOVE);
 
         state.addListener((obs , oldVal , newVal)-> {
-            if(newVal == GameState.MAZE_MOVE){
-                active.set(true);
-            }else{
-                active.set(false);
+            active.set(newVal == GameState.MAZE_MOVE);
+            if(newVal != GameState.MAZE_MOVE){
+                demagnetize();
             }
         });
-
-        forbiddenMove.set(mazeMove.equals(forbiddenMoveProperty.get()));
     }
 
     @Override
@@ -71,7 +69,7 @@ public class BaseSlotViewModel implements SlotViewModel{
 
     @Override
     public void mazeMove(){
-        forbiddenMoveProperty.setValue(mazeMove.getOpposite());
+        game.mazeMove(mazeMove);
     }
 
     @Override
