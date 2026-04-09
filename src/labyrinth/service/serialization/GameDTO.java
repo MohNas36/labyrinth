@@ -30,7 +30,7 @@ public class GameDTO {
             }
         }
 
-        this.maze = new MazeDTO();
+        this.maze = new MazeDTO(game.getMaze());
     }
 
     public GameState getState() {
