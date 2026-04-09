@@ -11,6 +11,7 @@ public class Slot {
     public Slot(Game game, int index){
         this.game = game;
         this.index = index;
+        this.p = new SimpleObservableValue<>(null);
     }
 
     public int getIndex(){
@@ -29,7 +30,7 @@ public class Slot {
         if(game.getGameState() != GameState.SETUP){
             throw new IllegalStateException("Le jeu n'est pas dans SETUP");
         }
-        if(p != null){
+        if(p.getValue() != null){
             throw new IllegalStateException("Le slot contient déja un joueur");
         }
         this.p.setValue(new Player(index));

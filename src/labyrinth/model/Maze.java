@@ -1,13 +1,11 @@
 package labyrinth.model;
 
 import labyrinth.util.collection.Grid;
-import labyrinth.util.*;
 import labyrinth.util.collection.Position;
 import labyrinth.util.observable.ObservableValue;
 import labyrinth.util.observable.SimpleObservableValue;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Set;
 
 public class Maze {
@@ -85,11 +83,10 @@ public class Maze {
         }
 
 
-        this.tiles.map(SimpleObservableValue :: new);
+        this.tiles = tiles.map(SimpleObservableValue :: new);
         this.fixedRows = fixedRows;
         this.fixedColumns = fixedColumns;
-        this.extraTile.setValue(extraTile);
-
+        this.extraTile = new SimpleObservableValue<>(extraTile);
     }
 
     public Grid<ObservableValue<Tile>> getObservableTiles(){

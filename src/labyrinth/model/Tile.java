@@ -11,26 +11,23 @@ import java.util.List;
 import java.util.Set;
 
 public class Tile{
-    private TileKind kind;
-    private Content content;
-    private SimpleObservableValue<Direction> direction;
-    private SimpleObservableList<Player> players = new SimpleObservableList<>();
+    private final TileKind kind;
+    private final Content content;
+    private final SimpleObservableValue<Direction> direction;
+    private final SimpleObservableList<Player> players = new SimpleObservableList<>();
 
     public Tile(TileKind kind) {
         this(kind, new None(), Direction.UP);
     }
 
     public Tile(TileKind kind, Content content) {
-        this.kind = kind;
-        this.content = content;
-        this.direction = new SimpleObservableValue<>(Direction.UP);
+        this(kind, content, Direction.UP);
     }
 
     public Tile(TileKind kind, Content content, Direction direction) {
         this.kind = kind;
         this.content = content;
-        this.direction.setValue(direction);
-
+        this.direction = new SimpleObservableValue<>(direction);
     }
 
     public TileKind getKind() {
