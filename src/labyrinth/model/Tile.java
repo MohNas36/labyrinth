@@ -1,5 +1,6 @@
 package labyrinth.model;
 
+import labyrinth.service.serialization.TileDTO;
 import labyrinth.util.observable.ObservableList;
 import labyrinth.util.observable.ObservableValue;
 import labyrinth.util.observable.SimpleObservableList;
@@ -72,5 +73,21 @@ public class Tile{
 
     public void rotate(int nbTimes){
         this.direction.setValue(direction.getValue().getRotated(nbTimes));
+    }
+
+    public static Tile from(TileDTO tileDTO, List<Player> players) {
+        Tile tile = new Tile(tileDTO.getKind(), tileDTO.getContent(), tileDTO.getOrientation());
+
+        if(tileDTO.getPlayers() != null) {
+            for(Integer playerIndex : tileDTO.getPlayers()) {
+                Player player = players.get(playerIndex);
+
+                if(player != null){
+                    tile.addPlayer(player);
+                }
+            }
+        }
+
+        return tile;
     }
 }
