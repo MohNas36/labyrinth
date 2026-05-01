@@ -31,6 +31,22 @@ public class GridAdapter implements JsonSerializer<Grid<TileDTO>>, JsonDeseriali
 
     @Override
     public Grid<TileDTO> deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        return null;
+        JsonArray jsonGrid = jsonElement.getAsJsonArray();
+
+        int height = jsonGrid.size();
+        int width = jsonGrid.get(0).getAsJsonArray().size();
+
+        Grid<TileDTO> grid = new ArrayGrid<>(width, height);
+
+        for(int i = 0; i < height; i++) {
+            JsonArray jsonRow = jsonGrid.get(i).getAsJsonArray();
+
+            for(int j = 0; j < width; j++) {
+                TileDTO tileDTO = jsonDeserializationContext.deserialize(jsonRow.get(j), TileDTO.class);
+                grid.set(j, i, tileDTO);
+            }
+        }
+
+        return grid;
     }
 }
