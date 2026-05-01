@@ -1,11 +1,16 @@
 package labyrinth.model;
 
+import labyrinth.service.serialization.MazeDTO;
+import labyrinth.service.serialization.TileDTO;
+import labyrinth.util.collection.ArrayGrid;
 import labyrinth.util.collection.Grid;
 import labyrinth.util.collection.Position;
 import labyrinth.util.observable.ObservableValue;
 import labyrinth.util.observable.SimpleObservableValue;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Maze {
@@ -223,6 +228,29 @@ public class Maze {
                 oldExtra.getValue().addPlayer(p);
             }
         }
+    }
+
+    public static Maze from(MazeDTO mazeDTO, List<Player> players){
+        Grid<TileDTO> grid = mazeDTO.getTiles();
+
+        Grid<Tile> tiles = new ArrayGrid<>(grid.getWidth(), grid.getHeight());
+
+        for(int x = 0; x < grid.getWidth(); x++){
+            for(int y = 0; y < grid.getHeight(); y++){
+                Tile tile = Tile.from(grid.get(x, y), players);
+                tiles.set(x, y, tile);
+            }
+        }
+
+        Tile extraTile = Tile.from(mazeDTO.getExtraTile(), players);
+
+        Maze maze = new Maze(tiles, extraTile, new HashSet<>(mazeDTO.getFixedRows()), new HashSet<>(mazeDTO.getFixedColumns()));
+
+        if(mazeDTO.getForbiddenMove() != null){
+            maze.forbiddenMove.setValue(mazeDTO.getForbiddenMove().getOpposite());
+        }
+
+        return maze;
     }
 
 }
