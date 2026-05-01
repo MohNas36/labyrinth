@@ -1,5 +1,7 @@
 package labyrinth.model;
 
+import labyrinth.service.serialization.PlayerDTO;
+
 public class Player {
     private int index;
     private Deck deck;
@@ -15,5 +17,9 @@ public class Player {
 
     public Deck getDeck() {
         return deck;
+    }
+
+    public void uodateFrom(PlayerDTO player) {
+        deck.updateFrom(player.getDeck());
     }
 }
