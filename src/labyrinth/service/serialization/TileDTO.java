@@ -18,13 +18,21 @@ public class TileDTO {
             this.players.add(p.getIndex());
         }
 
+        if(tile.getContent() instanceof None){
+            this.content = null;
+        }else{
+            this.content = tile.getContent();
+        }
 
-        this.content = tile.getContent();
+
         this.direction = tile.getOrientation();
         this.kind = tile.getKind();
     }
 
     public Content getContent() {
+        if(content == null){
+            return new None();
+        }
         return content;
     }
 
@@ -34,5 +42,9 @@ public class TileDTO {
 
     public TileKind getKind() {
         return kind;
+    }
+
+    public List<Integer> getPlayers() {
+        return players;
     }
 }
