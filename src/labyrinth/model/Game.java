@@ -1,5 +1,7 @@
 package labyrinth.model;
 
+import labyrinth.service.serialization.GameDTO;
+import labyrinth.service.serialization.PlayerDTO;
 import labyrinth.util.collection.Grid;
 import labyrinth.util.graph.Graph;
 import labyrinth.util.graph.MazeToGraphAdapter;
@@ -211,5 +213,47 @@ public class Game {
 
     public ObservableValue<Player> currentPlayerProperty(){
         return currentPlayer.asReadOnly();
+    }
+
+    public void updateFrom(GameDTO gameDTO){
+        gameState.setValue(GameState.SETUP);
+
+        if(paths == null){
+            paths = new SimpleObservableValue<>(null);
+        }
+
+        List<Player> players = new ArrayList<>();
+
+        for(int i = 0; i < slots.size(); i++){
+            PlayerDTO playerDTO = gameDTO.getPlayers().get(i);
+            Slot slot = slots.get(i);
+
+            if(playerDTO == null){
+                if(slot.getPlayer() != null){
+                    slot.close();
+                }
+                players.add(null);
+            }else{
+                if(slot.getPlayer() == null){
+                    slot.open();
+                }
+                slot.getPlayer().uodateFrom(playerDTO);
+                players.add(slot.getPlayer());
+            }
+        }
+
+        maze.setValue(Maze.from(gameDTO.getMaze(), players));
+
+        currentPlayerIndex.setValue(gameDTO.getCurrentPlayerIndex());
+
+        if (gameDTO.getCurrentPlayerIndex() != null && gameDTO.getCurrentPlayerIndex() >= 0) {
+            this.currentPlayer.setValue(players.get(gameDTO.getCurrentPlayerIndex()));
+        } else {
+            this.currentPlayer.setValue(null);
+        }
+
+        this.gameState.setValue(gameDTO.getState());
+
+        updatePaths();
     }
 }
