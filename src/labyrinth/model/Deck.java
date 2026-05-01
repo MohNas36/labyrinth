@@ -1,5 +1,6 @@
 package labyrinth.model;
 
+import labyrinth.service.serialization.DeckDTO;
 import labyrinth.util.observable.ObservableList;
 import labyrinth.util.observable.SimpleObservableList;
 
@@ -40,5 +41,13 @@ public class Deck {
         int carte = this.drawPile.removeFirst();
         this.discardPile.add(carte);
 
+    }
+
+    public void updateFrom(DeckDTO d){
+        drawPile.clear();
+        discardPile.clear();
+
+        drawPile.addAll(d.getDrawPile());
+        discardPile.addAll(d.getDiscardPile());
     }
 }
