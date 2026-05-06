@@ -1,6 +1,6 @@
 package labyrinth.service.dialog;
 
-import javafx.beans.value.ObservableValue;
+import labyrinth.util.observable.ObservableValue;
 
 import java.io.File;
 
