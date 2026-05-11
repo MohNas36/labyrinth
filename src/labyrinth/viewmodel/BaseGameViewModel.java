@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import labyrinth.model.Game;
 import labyrinth.model.GameState;
+import labyrinth.service.Services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +18,12 @@ public class BaseGameViewModel implements GameViewModel {
     private List<PlayerViewModel> playerViewModels;
     private ObjectProperty<GameState> state = new SimpleObjectProperty<>(GameState.SETUP);
     private MenuViewModel menuViewModel;
+    private Services services;
     private final Game game;
 
-    public BaseGameViewModel(Game game) {
+    public BaseGameViewModel(Game game, Services services) {
         this.game = game;
+        this.services = services;
         this.playerViewModels = new ArrayList<>();
         mazeViewModel = new BaseMazeViewModel(game);
         this.playerViewModels.add(new BasePlayerViewModel(game, 0));
@@ -71,7 +74,11 @@ public class BaseGameViewModel implements GameViewModel {
     @Override
     public void startGame() {
         if (state.get() == GameState.SETUP) {
-            this.state.set(GameState.MAZE_MOVE);
+            game.init();
+            this.state.set(game.getState());
+            this.currentPlayerId.set(game.getCurrentPlayer().getIndex());
+
+            services.getDialogService().publishMessage("Debut de la partie. Le joueur " + game.getCurrentPlayer().getIndex() + " commence");
         }
     }
 

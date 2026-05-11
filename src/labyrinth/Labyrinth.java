@@ -5,6 +5,12 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import labyrinth.model.Game;
+import labyrinth.service.Services;
+import labyrinth.service.dialog.DefaultDialogService;
+import labyrinth.service.dialog.DialogService;
+import labyrinth.service.serialization.JsonSerializationService;
+import labyrinth.service.serialization.SerializationService;
+import labyrinth.view.DialogHandler;
 import labyrinth.view.MainView;
 import labyrinth.viewmodel.*;
 
@@ -12,21 +18,20 @@ public class Labyrinth extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        SerializationService serializationService = new JsonSerializationService();
+        DialogService dialogService = new DefaultDialogService();
+        Services services = new Services(serializationService, dialogService);
+        new DialogHandler(services.getDialogService(), primaryStage);
+
+
         Game game = new Game();
-        game.init();
-        BaseGameViewModel viewModel = new BaseGameViewModel(game);
+        BaseGameViewModel viewModel = new BaseGameViewModel(game, services);
         BaseMenuViewModel menuViewModel = new BaseMenuViewModel();
-        /*StubTileViewModel tileViewModel = new StubTileViewModel();
-        StubCellViewModel cellViewModel = new StubCellViewModel(new Position(0, 0));*/
 
         primaryStage.titleProperty().bind(viewModel.titleProperty());
         BorderPane root = new MainView(viewModel, menuViewModel);
 
-        /*DevPanel devPanel = new DevPanel(viewModel/*, tileViewModel, cellViewModel, menuViewModel);*/
-
         Scene scene = new Scene(root, 800, 800);
-
-        viewModel.setTitle("Test Labyrinth");
 
         primaryStage.setScene(scene);
         primaryStage.show();
