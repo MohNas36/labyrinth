@@ -73,12 +73,14 @@ public class BaseGameViewModel implements GameViewModel {
 
     @Override
     public void startGame() {
-        if (state.get() == GameState.SETUP) {
+        if (game.getGameState() == GameState.SETUP) {
             game.init();
-            this.state.set(game.getState());
-            this.currentPlayerId.set(game.getCurrentPlayer().getIndex());
+        }
 
-            services.getDialogService().publishMessage("Debut de la partie. Le joueur " + game.getCurrentPlayer().getIndex() + " commence");
+        this.state.set(game.getGameState());
+
+        if (game.getCurrentPlayer() != null) {
+            this.currentPlayerId.set(game.getCurrentPlayer().getIndex());
         }
     }
 

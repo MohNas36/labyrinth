@@ -25,6 +25,7 @@ public class Labyrinth extends Application {
 
 
         Game game = new Game();
+        game.init();
         BaseGameViewModel viewModel = new BaseGameViewModel(game, services);
 
         primaryStage.titleProperty().bind(viewModel.titleProperty());
@@ -34,6 +35,7 @@ public class Labyrinth extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+        services.getDialogService().publishMessage("Test dialog");
     }
 
     public static void main(String[] args) {
