@@ -1,26 +1,88 @@
 package labyrinth.viewmodel;
 
 import javafx.application.Platform;
+import labyrinth.model.Game;
+import labyrinth.model.GameState;
+import labyrinth.service.Services;
+import labyrinth.service.dialog.FileRequest;
+import labyrinth.service.serialization.GameDTO;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public class BaseMenuViewModel implements MenuViewModel{
+
+    private final Game game;
+    private final Services services;
+
+    public BaseMenuViewModel(Game game, Services services) {
+        this.game = game;
+        this.services = services;
+    }
+
     @Override
     public void newGame() {
-        System.out.println("New game");
+        game.reset();
+        game.init();
+
+        services.getDialogService().publishMessage("Nouvelle partie. Joueur " + game.getCurrentPlayer().getIndex() + " commence");
     }
 
     @Override
     public void load() {
-        System.out.println("Load");
+        FileRequest request = services.getDialogService()
+                .requestOpenFile("Choisir une sauvegarde à charger");
+
+        request.getFile().thenAccept(file -> {
+            if (file == null) {
+                return;
+            }
+
+            try {
+                String data = Files.readString(file.toPath(), StandardCharsets.UTF_8);
+                GameDTO gameDTO = services.getSerializationService().deserialize(data);
+
+                game.updateFrom(gameDTO);
+
+                services.getDialogService().publishMessage("Partie chargée.");
+            } catch (Exception e) {
+                services.getDialogService().publishError("Impossible de charger cette sauvegarde.");
+            }
+        });
     }
 
     @Override
     public void save() {
-        System.out.println("Save");
+        if(game.getGameState() == GameState.SETUP){
+            services.getDialogService().publishError("Impossible de sauvegarder avant de commencer");
+            return;
+        }
+
+        FileRequest request = services.getDialogService().requestSaveFile("Choisir où sauvegarder la partie");
+        request.getFile().thenAccept(file -> {
+            if (file == null) {
+                return;
+            }
+
+            try {
+                GameDTO gameDTO = new GameDTO(game);
+                String data = services.getSerializationService().serialize(gameDTO);
+
+                Files.writeString(file.toPath(), data, StandardCharsets.UTF_8);
+
+                services.getDialogService().publishMessage("Partie sauvegardée");
+            } catch (IOException e) {
+                services.getDialogService().publishError("Impossible de sauvegarder la partie");
+            }
+        });
     }
 
     @Override
     public void showAbout() {
-        System.out.println("About");
+        services.getDialogService().publishMessage(
+                "Labyrinth\nProjet JavaFX - TP sérialisation et services"
+        );
     }
 
     @Override

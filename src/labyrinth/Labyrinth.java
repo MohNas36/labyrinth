@@ -26,10 +26,9 @@ public class Labyrinth extends Application {
 
         Game game = new Game();
         BaseGameViewModel viewModel = new BaseGameViewModel(game, services);
-        BaseMenuViewModel menuViewModel = new BaseMenuViewModel();
 
         primaryStage.titleProperty().bind(viewModel.titleProperty());
-        BorderPane root = new MainView(viewModel, menuViewModel);
+        BorderPane root = new MainView(viewModel, viewModel.getMenuViewModel());
 
         Scene scene = new Scene(root, 800, 800);
 

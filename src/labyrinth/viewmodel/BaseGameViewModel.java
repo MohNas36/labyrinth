@@ -30,7 +30,7 @@ public class BaseGameViewModel implements GameViewModel {
         this.playerViewModels.add(new BasePlayerViewModel(game, 1));
         this.playerViewModels.add(new BasePlayerViewModel(game, 2));
         this.playerViewModels.add(new BasePlayerViewModel(game, 3));
-        menuViewModel = new BaseMenuViewModel();
+        menuViewModel = new BaseMenuViewModel(game, services);
     }
 
     public void setTitle(String title){
