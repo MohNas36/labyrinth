@@ -61,11 +61,25 @@ public class BaseCellViewModel implements CellViewModel{
 
     @Override
     public void movePlayer() {
-        Tile t = game.getMaze().getTiles().get(position.x(), position.y());
-        game.movePlayer(t);
-        if(game.getGameState() == GameState.TURN_END){
+        Tile start = game.getMaze().getTile(game.getCurrentPlayer());
+        Tile target = game.getMaze().getTiles().get(position.x(), position.y());
+
+        System.out.println("Joueur courant : " + game.getCurrentPlayer().getIndex());
+        System.out.println("Position depart : " + game.getMaze().getPosition(start));
+        System.out.println("Position cible : " + position);
+
+        System.out.println("Sorties depart : " + start.getExits());
+        System.out.println("Sorties cible : " + target.getExits());
+
+        System.out.println("Accessible ? " + game.getPaths().isAccessible(target));
+        System.out.println("Chemin : " + game.getPaths().getPath(target));
+
+        game.movePlayer(target);
+
+        if (game.getGameState() == GameState.TURN_END) {
             game.endTurn();
         }
+
         System.out.println("Mouvement du joueur vers : " + position);
     }
 

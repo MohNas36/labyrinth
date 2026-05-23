@@ -28,10 +28,10 @@ public class BaseMazeViewModel implements MazeViewModel{
         });
 
         Grid<Tile> grid = game.getMaze().getTiles();
-        this.cellViewModels = new ArrayGrid<>(grid.getHeight(), grid.getWidth());
+        this.cellViewModels = new ArrayGrid<>(grid.getWidth(), grid.getHeight());
 
-        for(int x = 0 ; x < 7 ; x++){
-            for (int y = 0 ; y < 7 ; y++){
+        for (int x = 0; x < grid.getWidth(); x++) {
+            for (int y = 0; y < grid.getHeight(); y++) {
                 Tile t = grid.get(x, y);
                 this.cellViewModels.set(x , y , new BaseCellViewModel(new Position( x , y ), game, t));
             }

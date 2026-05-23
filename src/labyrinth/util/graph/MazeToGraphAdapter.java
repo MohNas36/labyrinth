@@ -11,36 +11,38 @@ public class MazeToGraphAdapter {
         Graph<Tile> graph = new Graph<>();
         Grid<Tile> grid = maze.getTiles();
 
-        for(int i = 0; i < grid.getHeight(); i++){
-            for(int j = 0; j < grid.getWidth(); j++){
-                Tile current = grid.get(i, j);
+        for (int x = 0; x < grid.getWidth(); x++) {
+            for (int y = 0; y < grid.getHeight(); y++) {
+                Tile current = grid.get(x, y);
                 graph.addNode(current);
 
-                for(Direction d : current.getExits()){
-                    int dx = i;
-                    int dy = j;
-                    if(d == Direction.UP){
-                        dx = i-1;
+                for (Direction direction : current.getExits()) {
+                    int nextX = x;
+                    int nextY = y;
+
+                    if (direction == Direction.UP) {
+                        nextY = y - 1;
+                    } else if (direction == Direction.DOWN) {
+                        nextY = y + 1;
+                    } else if (direction == Direction.LEFT) {
+                        nextX = x - 1;
+                    } else if (direction == Direction.RIGHT) {
+                        nextX = x + 1;
                     }
-                    if(d == Direction.DOWN){
-                        dx = i+1;
-                    }
-                    if(d == Direction.LEFT){
-                        dy = j-1;
-                    }
-                    if(d == Direction.RIGHT){
-                        dy = j+1;
-                    }
-                    if(dx < grid.getHeight() && dy < grid.getWidth() && dx >= 0 && dy >= 0){
-                        Tile next = grid.get(dx, dy);
-                        if(next.getExits().contains(d.getOpposite())){
+
+                    if (nextX >= 0 && nextX < grid.getWidth()
+                            && nextY >= 0 && nextY < grid.getHeight()) {
+
+                        Tile next = grid.get(nextX, nextY);
+
+                        if (next.getExits().contains(direction.getOpposite())) {
                             graph.addEdge(current, next);
                         }
                     }
                 }
             }
         }
+
         return graph;
     }
-
 }

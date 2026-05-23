@@ -36,6 +36,9 @@ public class Labyrinth extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         services.getDialogService().publishMessage("Test dialog");
+        services.getDialogService().publishMessage(
+                "Le joueur " + game.getCurrentPlayer().getIndex() + " commence."
+        );
     }
 
     public static void main(String[] args) {
