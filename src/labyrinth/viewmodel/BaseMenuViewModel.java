@@ -47,7 +47,8 @@ public class BaseMenuViewModel implements MenuViewModel{
 
                 services.getDialogService().publishMessage("Partie chargée.");
             } catch (Exception e) {
-                services.getDialogService().publishError("Impossible de charger cette sauvegarde.");
+                e.printStackTrace();
+                services.getDialogService().publishError("Impossible de charger cette sauvegarde : " + e.getMessage());
             }
         });
     }

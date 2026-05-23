@@ -75,25 +75,32 @@ public class BasePlayerViewModel implements PlayerViewModel{
         refreshTreasure();
     }
 
-    private void refreshPlayer(){
+    private void refreshPlayer() {
         Player p = game.getCurrentPlayer();
+
+        if (p == null) {
+            currentPlayer.set(false);
+            return;
+        }
+
         currentPlayer.set(index == p.getIndex());
     }
 
-    private void refreshTreasure(){
+    private void refreshTreasure() {
         foundTreasures.clear();
 
         Slot slot = game.getSlot(index);
-        if(slot.getPlayer() == null){
+
+        if (slot == null || slot.getPlayer() == null) {
             nextTreasure.set(null);
             return;
         }
 
         Player p = slot.getPlayer();
 
-        if(p.getDeck().getDrawPile().isEmpty()){
+        if (p.getDeck().getDrawPile().isEmpty()) {
             nextTreasure.set(null);
-        }else{
+        } else {
             nextTreasure.set(p.getDeck().getDrawPile().getFirst());
         }
 

@@ -9,38 +9,60 @@ import labyrinth.model.Treasure;
 import java.lang.reflect.Type;
 
 public class ContentAdapter implements JsonSerializer<Content>, JsonDeserializer<Content> {
-    @Override
-    public Content deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        JsonObject jsonObject = jsonElement.getAsJsonObject();
-
-        String contentType = jsonObject.get("type").getAsString();
-
-        if(contentType.equals("none")) {
-            return jsonDeserializationContext.deserialize(jsonElement, None.class);
-        }else if(contentType.equals("treasure")) {
-            return jsonDeserializationContext.deserialize(jsonElement, Treasure.class);
-        }else if(contentType.equals("startingPosition")) {
-            return jsonDeserializationContext.deserialize(jsonElement, StartingPosition.class);
-        }
-
-        return null;
-    }
 
     @Override
-    public JsonElement serialize(Content content, Type type, JsonSerializationContext jsonSerializationContext) {
-        JsonObject jsonObject = new JsonObject();
+    public JsonElement serialize(Content content, Type type, JsonSerializationContext context) {
+        JsonObject jsonObject;
 
-        if(content instanceof None){
+        if (content instanceof None) {
+            jsonObject = context.serialize(content, None.class).getAsJsonObject();
             jsonObject.addProperty("type", "none");
-            jsonObject = jsonSerializationContext.serialize(content, None.class).getAsJsonObject();
-        }else if(content instanceof StartingPosition){
+        } else if (content instanceof StartingPosition) {
+            jsonObject = context.serialize(content, StartingPosition.class).getAsJsonObject();
             jsonObject.addProperty("type", "startingPosition");
-            jsonObject = jsonSerializationContext.serialize(content, StartingPosition.class).getAsJsonObject();
-        }else if(content instanceof Treasure){
+        } else if (content instanceof Treasure) {
+            jsonObject = context.serialize(content, Treasure.class).getAsJsonObject();
             jsonObject.addProperty("type", "treasure");
-            jsonObject = jsonSerializationContext.serialize(content, Treasure.class).getAsJsonObject();
+        } else {
+            throw new JsonParseException("Content inconnu");
         }
 
         return jsonObject;
+    }
+
+    @Override
+    public Content deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) {
+        if (jsonElement == null || jsonElement.isJsonNull()) {
+            return new None();
+        }
+
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+        JsonElement typeElement = jsonObject.get("type");
+
+        if (typeElement != null && !typeElement.isJsonNull()) {
+            String contentType = typeElement.getAsString();
+
+            if (contentType.equals("none")) {
+                return context.deserialize(jsonObject, None.class);
+            } else if (contentType.equals("treasure")) {
+                return context.deserialize(jsonObject, Treasure.class);
+            } else if (contentType.equals("startingPosition")) {
+                return context.deserialize(jsonObject, StartingPosition.class);
+            }
+
+            throw new JsonParseException("Type de contenu inconnu : " + contentType);
+        }
+
+        // Ancienne sauvegarde sans champ "type"
+        if (jsonObject.has("id")) {
+            return context.deserialize(jsonObject, Treasure.class);
+        }
+
+        if (jsonObject.has("index")) {
+            return context.deserialize(jsonObject, StartingPosition.class);
+        }
+
+        return new None();
     }
 }

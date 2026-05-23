@@ -30,7 +30,8 @@ public class BaseTileViewModel implements TileViewModel{
         this.startingPosition = new SimpleObjectProperty<>(getStartPos(tile));
         this.treasure = new SimpleObjectProperty<>(getTrsr(tile));
         players = FXCollections.observableArrayList();
-        currentPlayer = new SimpleObjectProperty<>(game.getCurrentPlayer().getIndex());
+        currentPlayer = new SimpleObjectProperty<>(null);
+        refreshCurrentPlayer();
 
         players.clear();
         for(Player p : tile.getPlayers()) {
@@ -49,7 +50,7 @@ public class BaseTileViewModel implements TileViewModel{
         });
 
         game.currentPlayerProperty().addListener((obs, oldVal, newVal) -> {
-            this.currentPlayer.setValue(game.getCurrentPlayer().getIndex());
+            refreshCurrentPlayer();
         });
     }
 
@@ -154,5 +155,16 @@ public class BaseTileViewModel implements TileViewModel{
         }
 
         return currentPlayer.getValue();
+    }
+
+    private void refreshCurrentPlayer() {
+        Player player = game.getCurrentPlayer();
+
+        if (player == null) {
+            currentPlayer.setValue(null);
+            return;
+        }
+
+        currentPlayer.setValue(player.getIndex());
     }
 }
