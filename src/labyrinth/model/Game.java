@@ -12,6 +12,7 @@ import labyrinth.util.observable.SimpleObservableValue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class Game {
     private SimpleObservableValue<Maze> maze;
@@ -20,6 +21,7 @@ public class Game {
     private SimpleObservableValue<Paths<Tile>> paths;
     private SimpleObservableValue<Integer> currentPlayerIndex;
     private SimpleObservableValue<Player> currentPlayer;
+    private UUID uuid;
 
     public Game() {
         this.maze = new SimpleObservableValue<>(null);
@@ -31,6 +33,7 @@ public class Game {
         currentPlayerIndex = new SimpleObservableValue<>(0);
         currentPlayer = new SimpleObservableValue<>(new Player(currentPlayerIndex.getValue()));
         paths = new SimpleObservableValue<Paths<Tile>>(null);
+        this.uuid = UUID.randomUUID();
     }
 
     public Slot getSlot(int index) {
@@ -216,6 +219,7 @@ public class Game {
     }
 
     public void updateFrom(GameDTO gameDTO){
+        this.uuid = gameDTO.getUuid();
         gameState.setValue(GameState.SETUP);
 
         if(paths == null){
@@ -255,5 +259,13 @@ public class Game {
         this.gameState.setValue(gameDTO.getState());
 
         updatePaths();
+    }
+
+    public List<Slot> getSlots() {
+        return slots;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 }
