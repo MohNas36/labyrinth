@@ -15,10 +15,12 @@ public class BaseMenuViewModel implements MenuViewModel{
 
     private final Game game;
     private final Services services;
+    private final BaseGameViewModel gameViewModel;
 
-    public BaseMenuViewModel(Game game, Services services) {
+    public BaseMenuViewModel(Game game, Services services, BaseGameViewModel gameViewModel) {
         this.game = game;
         this.services = services;
+        this.gameViewModel = gameViewModel;
     }
 
     @Override
@@ -44,6 +46,7 @@ public class BaseMenuViewModel implements MenuViewModel{
                 GameDTO gameDTO = services.getSerializationService().deserialize(data);
 
                 game.updateFrom(gameDTO);
+                gameViewModel.rebuildMazeViewModel();
 
                 services.getDialogService().publishMessage("Partie chargée.");
             } catch (Exception e) {

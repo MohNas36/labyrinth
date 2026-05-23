@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaseGameViewModel implements GameViewModel {
-    private MazeViewModel mazeViewModel;
+    private ObjectProperty<MazeViewModel> mazeViewModel = new SimpleObjectProperty<>();
     private Property<String> title = new SimpleObjectProperty<>("Labyrinthe");
     private ObjectProperty<Integer> currentPlayerId = new SimpleObjectProperty(0);
     private List<PlayerViewModel> playerViewModels;
@@ -25,20 +25,20 @@ public class BaseGameViewModel implements GameViewModel {
         this.game = game;
         this.services = services;
         this.playerViewModels = new ArrayList<>();
-        mazeViewModel = new BaseMazeViewModel(game);
+        mazeViewModel.set(new BaseMazeViewModel(game));
         this.playerViewModels.add(new BasePlayerViewModel(game, 0));
         this.playerViewModels.add(new BasePlayerViewModel(game, 1));
         this.playerViewModels.add(new BasePlayerViewModel(game, 2));
         this.playerViewModels.add(new BasePlayerViewModel(game, 3));
-        menuViewModel = new BaseMenuViewModel(game, services);
+        menuViewModel = new BaseMenuViewModel(game, services, this);
     }
 
     public void setTitle(String title){
         this.title.setValue(title);
     }
 
-    public BaseMazeViewModel getBaseMazeViewModel(){
-        return (BaseMazeViewModel) this.mazeViewModel;
+    public BaseMazeViewModel getBaseMazeViewModel() {
+        return (BaseMazeViewModel) this.mazeViewModel.get();
     }
 
     @Override
@@ -47,7 +47,12 @@ public class BaseGameViewModel implements GameViewModel {
     }
 
     @Override
-    public MazeViewModel getMazeViewModel(){
+    public MazeViewModel getMazeViewModel() {
+        return mazeViewModel.get();
+    }
+
+    @Override
+    public ObservableValue<MazeViewModel> mazeViewModelProperty() {
         return mazeViewModel;
     }
 
@@ -97,5 +102,15 @@ public class BaseGameViewModel implements GameViewModel {
     @Override
     public int getCurrentPlayer() {
         return currentPlayerId.get();
+    }
+
+    public void rebuildMazeViewModel() {
+        mazeViewModel.set(new BaseMazeViewModel(game));
+
+        state.set(game.getGameState());
+
+        if (game.getCurrentPlayer() != null) {
+            currentPlayerId.set(game.getCurrentPlayer().getIndex());
+        }
     }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface GameViewModel {
    public ObservableValue<String> titleProperty();
+   ObservableValue<MazeViewModel> mazeViewModelProperty();
    public MazeViewModel getMazeViewModel();
    public String getTitle();
    public int currentplayerIdProperty();
