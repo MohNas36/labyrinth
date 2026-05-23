@@ -7,6 +7,7 @@ import labyrinth.model.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class GameDTO {
 
@@ -14,10 +15,12 @@ public class GameDTO {
     private final GameState gameState;
     private final List<PlayerDTO> players;
     private final MazeDTO maze;
+    private UUID uuid;
 
     public GameDTO(Game game){
         this.currentPlayerIndex = game.getCurrentPlayer().getIndex();
         this.gameState = game.getGameState();
+        this.uuid = game.getUuid();
 
         this.players = new ArrayList<>();
         for(int i = 0; i < 4; i++){
@@ -34,6 +37,7 @@ public class GameDTO {
         }
 
         this.maze = new MazeDTO(game.getMaze());
+
     }
 
     public GameState getState() {
@@ -50,5 +54,9 @@ public class GameDTO {
 
     public MazeDTO getMaze() {
         return maze;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 }
