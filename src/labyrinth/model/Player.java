@@ -9,9 +9,13 @@ public class Player {
     private Deck deck;
     private UUID uuid;
 
-    public Player(int index) {
+    public Player(int index , UUID uuid) {
         this.index = index;
         this.deck = new Deck();
+        this.uuid = uuid;
+    }
+    public Player(int index) {
+        this(index , null);
     }
 
 
@@ -19,7 +23,7 @@ public class Player {
         return uuid;
     }
 
-    public void uodateFrom(PlayerDTO player) {
+    public void updateFrom(PlayerDTO player) {
         this.uuid = player.getUuid();
         deck.updateFrom(player.getDeck());
     }

@@ -27,13 +27,14 @@ public class Game {
         this.maze = new SimpleObservableValue<>(null);
         gameState = new SimpleObservableValue<>(GameState.SETUP);
         this.slots = new ArrayList<>(4);
+        this.uuid = UUID.randomUUID();
+
         for(int i = 0; i < 4; i++) {
             slots.add(new Slot(this, i));
         }
         currentPlayerIndex = new SimpleObservableValue<>(0);
         currentPlayer = new SimpleObservableValue<>(new Player(currentPlayerIndex.getValue()));
         paths = new SimpleObservableValue<Paths<Tile>>(null);
-        this.uuid = UUID.randomUUID();
     }
 
     public Slot getSlot(int index) {
@@ -241,7 +242,7 @@ public class Game {
                 if(slot.getPlayer() == null){
                     slot.open();
                 }
-                slot.getPlayer().uodateFrom(playerDTO);
+                slot.getPlayer().updateFrom(playerDTO);
                 players.add(slot.getPlayer());
             }
         }
