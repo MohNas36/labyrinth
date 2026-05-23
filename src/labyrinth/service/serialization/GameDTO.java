@@ -19,7 +19,10 @@ public class GameDTO {
         this.currentPlayerIndex = game.getCurrentPlayer().getIndex();
         this.gameState = game.getGameState();
 
-        this.players = new ArrayList<>(4);
+        this.players = new ArrayList<>();
+        for(int i = 0; i < 4; i++){
+            this.players.add(null);
+        }
         for(int x = 0 ; x < game.getMaze().getTiles().getWidth() ; x++){
             for(int y = 0 ; y < game.getMaze().getTiles().getHeight() ; y++){
                 Tile t = game.getMaze().getTiles().get(x , y);

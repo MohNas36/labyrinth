@@ -2,6 +2,7 @@ package labyrinth.service.serialization;
 
 import labyrinth.model.Maze;
 import labyrinth.model.MazeMove;
+import labyrinth.util.collection.ArrayGrid;
 import labyrinth.util.collection.Grid;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class MazeDTO {
     private final MazeMove forbiddenMove;
 
     public MazeDTO(Maze maze){
+        this.tiles = new ArrayGrid<>(maze.getTiles().getWidth(), maze.getTiles().getHeight());
         fixedColumns = new ArrayList<>(maze.getFixedColumns());
         fixedRows = new ArrayList<>(maze.getFixedRows());
 

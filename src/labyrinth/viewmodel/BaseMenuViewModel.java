@@ -72,8 +72,9 @@ public class BaseMenuViewModel implements MenuViewModel{
                 Files.writeString(file.toPath(), data, StandardCharsets.UTF_8);
 
                 services.getDialogService().publishMessage("Partie sauvegardée");
-            } catch (IOException e) {
-                services.getDialogService().publishError("Impossible de sauvegarder la partie");
+            } catch (Exception e) {
+                e.printStackTrace();
+                services.getDialogService().publishError("Impossible de sauvegarder la partie : " + e.getMessage());
             }
         });
     }
