@@ -12,6 +12,7 @@ import labyrinth.model.Slot;
 
 import java.util.List;
 import java.util.OptionalInt;
+import java.util.UUID;
 
 public class BasePlayerViewModel implements PlayerViewModel{
     private int index;
@@ -192,6 +193,11 @@ public class BasePlayerViewModel implements PlayerViewModel{
     public void addPlayer() {
         isActive.set(true);
         name.set("Joueur " + index);
+    }
+
+    @Override
+    public void addPlayer(UUID uuid) {
+        game.getSlot(index).open(uuid);
     }
 
     @Override
