@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import labyrinth.model.Game;
+import labyrinth.service.GameBootstrapper;
 import labyrinth.service.Services;
 import labyrinth.service.dialog.DefaultDialogService;
 import labyrinth.service.dialog.DialogService;
@@ -27,8 +28,9 @@ public class Labyrinth extends Application {
         new DialogHandler(services.getDialogService(), primaryStage);
 
 
-        Game game = new Game();
-        game.init();
+        GameBootstrapper gameBootstrapper = new GameBootstrapper(services);
+        Game game = gameBootstrapper.bootstrap();
+
         BaseGameViewModel viewModel = new BaseGameViewModel(game, services);
 
         primaryStage.titleProperty().bind(viewModel.titleProperty());
