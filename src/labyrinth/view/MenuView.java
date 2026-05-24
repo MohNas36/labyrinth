@@ -10,22 +10,26 @@ public class MenuView extends MenuBar {
     public MenuView(MenuViewModel viewModel){
         Menu fileMenu = new Menu("File");
         Menu helpMenu = new Menu("Help");
+        Menu editMenu = new Menu("Edit");
 
         MenuItem newItem = new MenuItem("New");
         MenuItem loadItem = new MenuItem("Load");
         MenuItem saveItem = new MenuItem("Save");
         MenuItem exitItem = new MenuItem("Exit");
         MenuItem aboutItem = new MenuItem("About");
+        MenuItem manageProfilesItem = new MenuItem("Manage Profiles");
 
         newItem.setOnAction(e -> viewModel.newGame());
         loadItem.setOnAction(e -> viewModel.load());
         saveItem.setOnAction(e -> viewModel.save());
         exitItem.setOnAction(e -> viewModel.exit());
         aboutItem.setOnAction(e -> viewModel.showAbout());
+        manageProfilesItem.setOnAction(e -> viewModel.showProfilesManager());
 
 
         fileMenu.getItems().addAll(newItem, loadItem, saveItem, exitItem);
         helpMenu.getItems().addAll(aboutItem);
+        editMenu.getItems().addAll(manageProfilesItem);
 
         getMenus().addAll(fileMenu, helpMenu);
 
