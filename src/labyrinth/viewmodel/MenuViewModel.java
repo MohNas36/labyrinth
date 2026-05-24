@@ -6,4 +6,5 @@ public interface MenuViewModel {
     void save();
     void exit();
     void showAbout();
+    void showProfilesManager();
 }

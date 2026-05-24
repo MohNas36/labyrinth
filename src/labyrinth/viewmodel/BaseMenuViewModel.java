@@ -91,6 +91,11 @@ public class BaseMenuViewModel implements MenuViewModel{
     }
 
     @Override
+    public void showProfilesManager() {
+        services.getDialogService().profilesManagerRequestProperty();
+    }
+
+    @Override
     public void exit() {
         Platform.exit();
     }
