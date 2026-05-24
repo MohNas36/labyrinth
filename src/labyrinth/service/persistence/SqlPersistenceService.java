@@ -1,11 +1,13 @@
 package labyrinth.service.persistence;
 
+import labyrinth.service.serialization.GameDTO;
 import labyrinth.service.serialization.SerializationService;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -161,6 +163,29 @@ public class SqlPersistenceService {
     private void firePlayerInfoChanged(UUID playerId) {
         for (UserProfileChangedHandler handler : handlers) {
             handler.handlePlayerInfoChanged(playerId);
+        }
+    }
+
+    public void saveGame(GameDTO gameDTO) {
+        String sql = """
+            INSERT OR REPLACE INTO games (id, timestamp, data)
+            VALUES (?, ?, ?)
+            """;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            String id = gameDTO.getUuid().toString();
+            long timestamp = Instant.now().toEpochMilli();
+
+            String data = serializationService.serialize(gameDTO);
+
+            statement.setString(1, id);
+            statement.setLong(2, timestamp);
+            statement.setString(3, data);
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new SqlException("Impossible de sauvegarder la partie", e);
         }
     }
 }
