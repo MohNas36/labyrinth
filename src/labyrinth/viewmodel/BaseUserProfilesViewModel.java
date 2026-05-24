@@ -6,8 +6,8 @@ import labyrinth.model.Player;
 import labyrinth.model.Slot;
 import labyrinth.service.persistence.SqlPersistenceService;
 import labyrinth.service.persistence.UserProfile;
-import labyrinth.util.observable.ObservableList;
-import labyrinth.util.observable.SimpleObservableList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.UUID;
 
@@ -16,15 +16,15 @@ public class BaseUserProfilesViewModel implements UserProfilesViewModel {
     private final Game game;
     private final SqlPersistenceService persistenceService;
 
-    private final SimpleObservableList<UserProfile> userProfiles;
-    private final SimpleObservableList<UserProfile> selectedUserProfiles;
+    private final ObservableList<UserProfile> userProfiles;
+    private final ObservableList<UserProfile> selectedUserProfiles;
 
     public BaseUserProfilesViewModel(Game game, SqlPersistenceService persistenceService) {
         this.game = game;
         this.persistenceService = persistenceService;
 
-        this.userProfiles = new SimpleObservableList<>();
-        this.selectedUserProfiles = new SimpleObservableList<>();
+        this.userProfiles = FXCollections.observableArrayList();
+        this.selectedUserProfiles = FXCollections.observableArrayList();
         persistenceService.addUserProfileChangedHandler(playerId -> {
             refreshUserProfiles();
             refreshSelectedUserProfiles();
@@ -39,12 +39,12 @@ public class BaseUserProfilesViewModel implements UserProfilesViewModel {
 
     @Override
     public ObservableList<UserProfile> getUserProfiles() {
-        return userProfiles.asReadOnly();
+        return userProfiles;
     }
 
     @Override
     public ObservableList<UserProfile> getSelectedUserProfiles() {
-        return selectedUserProfiles.asReadOnly();
+        return selectedUserProfiles;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package labyrinth.viewmodel;
 
 import labyrinth.service.persistence.UserProfile;
-import labyrinth.util.observable.ObservableList;
+import javafx.collections.ObservableList;
 
 public interface UserProfilesViewModel {
 
