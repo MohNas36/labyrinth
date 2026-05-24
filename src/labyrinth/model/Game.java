@@ -76,6 +76,8 @@ public class Game {
     }
 
     public void reset(){
+        this.uuid = UUID.randomUUID();
+
         gameState.setValue(GameState.SETUP);
         maze.setValue(null);
         this.currentPlayerIndex.setValue(-1);
@@ -85,6 +87,7 @@ public class Game {
                 slot.close();
             }
         }
+
         this.paths.setValue(null);
     }
 

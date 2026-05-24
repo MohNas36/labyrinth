@@ -135,4 +135,12 @@ public class BaseGameViewModel implements GameViewModel {
             );
         }
     }
+
+
+    //fonction qui rend le jeu dans le mode setup
+    public void goToSetup() {
+        mazeViewModel.set(null);
+        state.set(GameState.SETUP);
+        currentPlayerId.set(-1);
+    }
 }

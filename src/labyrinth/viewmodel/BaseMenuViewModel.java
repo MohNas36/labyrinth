@@ -26,9 +26,12 @@ public class BaseMenuViewModel implements MenuViewModel{
     @Override
     public void newGame() {
         game.reset();
-        game.init();
 
-        services.getDialogService().publishMessage("Nouvelle partie. Joueur " + game.getCurrentPlayer().getIndex() + " commence");
+        gameViewModel.goToSetup();
+
+        services.getDialogService().publishMessage(
+                "Nouvelle partie : choisis les joueurs puis clique sur Start game."
+        );
     }
 
     @Override
