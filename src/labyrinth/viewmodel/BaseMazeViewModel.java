@@ -40,11 +40,7 @@ public class BaseMazeViewModel implements MazeViewModel {
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
                 Tile tile = grid.get(x, y);
-                this.cellViewModels.set(
-                        x,
-                        y,
-                        new BaseCellViewModel(new Position(x, y), game, tile)
-                );
+                this.cellViewModels.set(x, y, new BaseCellViewModel(new Position(x, y), game, tile, gameViewModel));
             }
         }
 

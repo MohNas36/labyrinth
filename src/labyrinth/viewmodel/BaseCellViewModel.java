@@ -11,14 +11,16 @@ import labyrinth.util.observable.SimpleObservableValue;
 
 public class BaseCellViewModel implements CellViewModel{
     private Game game;
+    private BaseGameViewModel gameViewModel;
     private Tile tile;
     private Position position;
     private BaseTileViewModel ViewModel;
     private SimpleObservableValue<Boolean> active = new SimpleObservableValue<>(false);
     private ObjectProperty<GameState> state;
 
-    public BaseCellViewModel(Position position, Game game, Tile tile) {
+    public BaseCellViewModel(Position position, Game game, Tile tile, BaseGameViewModel gameViewModel) {
         this.game = game;
+        this.gameViewModel = gameViewModel;
         this.tile = tile;
         this.position = position;
         this.state = new SimpleObjectProperty<>(game.getState());
@@ -78,6 +80,7 @@ public class BaseCellViewModel implements CellViewModel{
 
         if (game.getGameState() == GameState.TURN_END) {
             game.endTurn();
+            gameViewModel.showCurrentPlayerMessage();
         }
 
         System.out.println("Mouvement du joueur vers : " + position);

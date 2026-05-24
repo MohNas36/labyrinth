@@ -113,4 +113,14 @@ public class BaseGameViewModel implements GameViewModel {
             currentPlayerId.set(game.getCurrentPlayer().getIndex());
         }
     }
+
+    public void showCurrentPlayerMessage() {
+        if (game.getCurrentPlayer() != null) {
+            currentPlayerId.set(game.getCurrentPlayer().getIndex());
+
+            services.getDialogService().publishMessage(
+                    "C'est au tour du joueur " + game.getCurrentPlayer().getIndex() + "."
+            );
+        }
+    }
 }
