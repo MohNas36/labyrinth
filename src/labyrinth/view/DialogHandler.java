@@ -13,9 +13,11 @@ import java.io.File;
 public class DialogHandler {
 
     public Window owner;
+    private final ProfilesManagerWindow profilesManagerWindow;
 
-    public DialogHandler(DialogService dialogService, Window owner) {
+    public DialogHandler(DialogService dialogService, Window owner, ProfilesManagerWindow profilesManagerWindow) {
         this.owner = owner;
+        this.profilesManagerWindow = profilesManagerWindow;
 
         dialogService.fileRequestProperty().addListener(observable -> {
             FileRequest fileRequest = dialogService.fileRequestProperty().getValue();

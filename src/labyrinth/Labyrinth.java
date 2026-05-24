@@ -14,6 +14,7 @@ import labyrinth.service.serialization.JsonSerializationService;
 import labyrinth.service.serialization.SerializationService;
 import labyrinth.view.DialogHandler;
 import labyrinth.view.MainView;
+import labyrinth.view.ProfilesManagerWindow;
 import labyrinth.viewmodel.*;
 
 public class Labyrinth extends Application {
@@ -25,13 +26,16 @@ public class Labyrinth extends Application {
         SqlPersistenceService sqlPersistenceService = new SqlPersistenceService(serializationService);
 
         Services services = new Services(serializationService, dialogService,  sqlPersistenceService);
-        new DialogHandler(services.getDialogService(), primaryStage);
+
 
 
         GameBootstrapper gameBootstrapper = new GameBootstrapper(services);
         Game game = gameBootstrapper.bootstrap();
 
         BaseGameViewModel viewModel = new BaseGameViewModel(game, services);
+        ProfilesManagerWindow profilesManagerWindow = new ProfilesManagerWindow(viewModel.getUserProfilesViewModel());
+
+        new DialogHandler(services.getDialogService(), primaryStage,  profilesManagerWindow);
 
         primaryStage.titleProperty().bind(viewModel.titleProperty());
         BorderPane root = new MainView(viewModel, viewModel.getMenuViewModel());
