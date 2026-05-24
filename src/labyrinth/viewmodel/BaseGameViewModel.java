@@ -26,11 +26,15 @@ public class BaseGameViewModel implements GameViewModel {
         this.game = game;
         this.services = services;
         this.playerViewModels = new ArrayList<>();
-        mazeViewModel.set(new BaseMazeViewModel(game, this));
-        this.playerViewModels.add(new BasePlayerViewModel(game, 0));
-        this.playerViewModels.add(new BasePlayerViewModel(game, 1));
-        this.playerViewModels.add(new BasePlayerViewModel(game, 2));
-        this.playerViewModels.add(new BasePlayerViewModel(game, 3));
+        if (game.getGameState() == GameState.SETUP) {
+            mazeViewModel.set(null);
+        } else {
+            mazeViewModel.set(new BaseMazeViewModel(game, this));
+        }
+        this.playerViewModels.add(new BasePlayerViewModel(game, 0, services.getSqlPersistenceService()));
+        this.playerViewModels.add(new BasePlayerViewModel(game, 1,  services.getSqlPersistenceService()));
+        this.playerViewModels.add(new BasePlayerViewModel(game, 2 ,  services.getSqlPersistenceService()));
+        this.playerViewModels.add(new BasePlayerViewModel(game, 3, services.getSqlPersistenceService()));
         menuViewModel = new BaseMenuViewModel(game, services, this);
         this.userProfilesViewModel = new BaseUserProfilesViewModel(game , services.getSqlPersistenceService());
     }
@@ -82,6 +86,7 @@ public class BaseGameViewModel implements GameViewModel {
     public void startGame() {
         if (game.getGameState() == GameState.SETUP) {
             game.init();
+            mazeViewModel.set(new BaseMazeViewModel(game, this));
         }
 
         this.state.set(game.getGameState());

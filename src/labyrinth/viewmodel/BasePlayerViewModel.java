@@ -9,6 +9,8 @@ import labyrinth.model.Game;
 import labyrinth.model.GameState;
 import labyrinth.model.Player;
 import labyrinth.model.Slot;
+import labyrinth.service.persistence.SqlPersistenceService;
+import labyrinth.service.persistence.UserProfile;
 
 import java.util.List;
 import java.util.OptionalInt;
@@ -25,10 +27,12 @@ public class BasePlayerViewModel implements PlayerViewModel{
     private ObjectProperty<Integer> nextTreasure;
     private ObservableList<Integer> foundTreasures;
     private BooleanProperty isLocked;
+    private SqlPersistenceService persistenceService;
 
-    public BasePlayerViewModel(Game game, int index) {
+    public BasePlayerViewModel(Game game, int index , SqlPersistenceService persistenceService) {
         this.game = game;
         this.index = index;
+        this.persistenceService = persistenceService;
 
         this.isActive = new SimpleBooleanProperty(false);
         this.name = new SimpleStringProperty("Libre");
@@ -38,7 +42,7 @@ public class BasePlayerViewModel implements PlayerViewModel{
         this.foundTreasures = FXCollections.observableArrayList();
         this.isLocked = new SimpleBooleanProperty(false);
 
-        this.isLocked.set(game.getGameState() == GameState.SETUP);
+        this.isLocked = new SimpleBooleanProperty(game.getGameState() != GameState.SETUP);
 
         refresh();
 
@@ -51,27 +55,14 @@ public class BasePlayerViewModel implements PlayerViewModel{
             refreshPlayer();
         });
 
-        Player player = game.getCurrentPlayer();
-
-        player.getDeck().drawPileProperty().addListener(observable -> {
-            refreshTreasure();
-        });
-
-        player.getDeck().discardPileProperty().addListener(observable -> {
-            refreshTreasure();
-        });
-
     }
 
-    private void refresh(){
-        Slot slot = game.getSlot(index);
+    private void refresh() {
+        Slot slot = game.getSlots().get(index);
 
-        if(game.getState() == GameState.SETUP) {
-            isActive.set(false);
-        }else{
-            isActive.set(true);
-        }
+        isActive.set(slot.getPlayer() != null);
 
+        refreshName();
         refreshPlayer();
         refreshTreasure();
     }
@@ -191,13 +182,26 @@ public class BasePlayerViewModel implements PlayerViewModel{
 
     @Override
     public void addPlayer() {
-        isActive.set(true);
-        name.set("Joueur " + index);
+        Slot slot = game.getSlots().get(index);
+
+        if (slot.getPlayer() != null) {
+            slot.close();
+        }
+
+        slot.open();
+        refresh();
     }
 
     @Override
     public void addPlayer(UUID uuid) {
-        game.getSlot(index).open(uuid);
+        Slot slot = game.getSlots().get(index);
+
+        if (slot.getPlayer() != null) {
+            slot.close();
+        }
+
+        slot.open(uuid);
+        refresh();
     }
 
     @Override
@@ -208,8 +212,37 @@ public class BasePlayerViewModel implements PlayerViewModel{
 
     @Override
     public void removePlayer() {
-        isActive.set(false);
-        name.set("Libre");
+        Slot slot = game.getSlots().get(index);
+
+        if (slot.getPlayer() != null) {
+            slot.close();
+        }
+
+        refresh();
+    }
+
+    private void refreshName() {
+        Slot slot = game.getSlots().get(index);
+
+        if (slot.getPlayer() == null) {
+            name.set("Libre");
+            return;
+        }
+
+        Player player = slot.getPlayer();
+
+        if (player.getUuid() == null) {
+            name.set("Joueur " + (index + 1));
+            return;
+        }
+
+        UserProfile profile = persistenceService.getUserProfile(player.getUuid());
+
+        if (profile == null) {
+            name.set("Joueur " + (index + 1));
+        } else {
+            name.set(profile.name());
+        }
     }
 }
 

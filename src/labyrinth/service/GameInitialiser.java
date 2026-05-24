@@ -14,12 +14,10 @@ public class GameInitialiser {
 
     public void init(Game game) {
         GameDTO gameDTO = sqlPersistenceService.loadLatestGame();
-        if(gameDTO == null) {
-            game.init();
-        }else {
+
+        if (gameDTO != null) {
             game.updateFrom(gameDTO);
         }
-
     }
 
 }

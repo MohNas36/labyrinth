@@ -31,10 +31,30 @@ public class PlayerView extends VBox {
 
         AddPlayerButton addPlayerButton = new AddPlayerButton(viewModel, userProfilesViewModel);
 
+        addPlayerButton.disableProperty().bind(viewModel.isLockedProperty());
+        removePlayer.disableProperty().bind(viewModel.isLockedProperty());
+
+        Runnable updateButtons = () -> {
+            boolean active = viewModel.isActive();
+
+            addPlayerButton.setVisible(!active);
+            addPlayerButton.setManaged(!active);
+
+            removePlayer.setVisible(active);
+            removePlayer.setManaged(active);
+        };
+
+        viewModel.activeProperty().addListener((obs, oldVal, newVal) -> updateButtons.run());
+        updateButtons.run();
+
+        addPlayerButton.disableProperty().bind(viewModel.isLockedProperty());
+        removePlayer.disableProperty().bind(viewModel.isLockedProperty());
+
         removePlayer.setOnAction(e-> viewModel.removePlayer());
 
         HBox players = new HBox(imageView , name); // un composant pour les joueurs
         VBox buttons = new VBox(addPlayerButton, removePlayer);// un composant pour les buttons
+
 
         getChildren().addAll(players , buttons);
     }

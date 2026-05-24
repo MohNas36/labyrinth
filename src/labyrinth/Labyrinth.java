@@ -44,7 +44,11 @@ public class Labyrinth extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
-        services.getDialogService().publishMessage("La partie commence. Le joueur " + game.getCurrentPlayer().getIndex() + " commence.");
+        if (game.getCurrentPlayer() != null) {
+            services.getDialogService().publishMessage(
+                    "La partie commence. Le joueur " + game.getCurrentPlayer().getIndex() + " commence."
+            );
+        }
     }
 
     public static void main(String[] args) {

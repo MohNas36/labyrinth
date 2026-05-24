@@ -97,8 +97,10 @@ public class Game {
         Random random = new Random();
 
         //placer les joueurs sur leurs case de depart
-        for(Slot slot : slots){
-            slot.open();
+        for (Slot slot : slots) {
+            if (slot.getPlayer() == null) {
+                slot.open();
+            }
         }
 
         for(Slot slot : slots ){
