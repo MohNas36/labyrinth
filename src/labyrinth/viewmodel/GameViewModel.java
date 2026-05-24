@@ -18,4 +18,5 @@ public interface GameViewModel {
    MenuViewModel getMenuViewModel();
    ObservableValue<Integer> currentPlayerProperty();
    int getCurrentPlayer();
+   UserProfilesViewModel getUserProfilesViewModel();
 }

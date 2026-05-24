@@ -20,6 +20,7 @@ public class BaseGameViewModel implements GameViewModel {
     private MenuViewModel menuViewModel;
     private Services services;
     private final Game game;
+    private final UserProfilesViewModel userProfilesViewModel;
 
     public BaseGameViewModel(Game game, Services services) {
         this.game = game;
@@ -31,6 +32,7 @@ public class BaseGameViewModel implements GameViewModel {
         this.playerViewModels.add(new BasePlayerViewModel(game, 2));
         this.playerViewModels.add(new BasePlayerViewModel(game, 3));
         menuViewModel = new BaseMenuViewModel(game, services, this);
+        this.userProfilesViewModel = new BaseUserProfilesViewModel(game , services.getSqlPersistenceService());
     }
 
     public void setTitle(String title){
@@ -102,6 +104,11 @@ public class BaseGameViewModel implements GameViewModel {
     @Override
     public int getCurrentPlayer() {
         return currentPlayerId.get();
+    }
+
+    @Override
+    public UserProfilesViewModel getUserProfilesViewModel() {
+        return userProfilesViewModel;
     }
 
     public void rebuildMazeViewModel() {
