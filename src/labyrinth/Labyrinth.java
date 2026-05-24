@@ -8,6 +8,7 @@ import labyrinth.model.Game;
 import labyrinth.service.Services;
 import labyrinth.service.dialog.DefaultDialogService;
 import labyrinth.service.dialog.DialogService;
+import labyrinth.service.persistence.SqlPersistenceService;
 import labyrinth.service.serialization.JsonSerializationService;
 import labyrinth.service.serialization.SerializationService;
 import labyrinth.view.DialogHandler;
@@ -20,7 +21,9 @@ public class Labyrinth extends Application {
     public void start(Stage primaryStage) {
         SerializationService serializationService = new JsonSerializationService();
         DialogService dialogService = new DefaultDialogService();
-        Services services = new Services(serializationService, dialogService);
+        SqlPersistenceService sqlPersistenceService = new SqlPersistenceService(serializationService);
+
+        Services services = new Services(serializationService, dialogService,  sqlPersistenceService);
         new DialogHandler(services.getDialogService(), primaryStage);
 
 
