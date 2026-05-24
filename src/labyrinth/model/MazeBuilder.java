@@ -59,10 +59,10 @@ public class MazeBuilder {
 
     public static Maze buildStandardMaze(){
         MazeBuilder mb = new MazeBuilder(7, 7);
-        Tile j1 = new Tile(TileKind.ELBOW, new StartingPosition(0));
-        Tile j2 = new Tile(TileKind.ELBOW, new StartingPosition(1));
-        Tile j3 = new Tile(TileKind.ELBOW, new StartingPosition(2));
-        Tile j4 = new Tile(TileKind.ELBOW, new StartingPosition(3));
+        Tile j1 = new Tile(TileKind.ELBOW, new StartingPosition(0), Direction.RIGHT);
+        Tile j2 = new Tile(TileKind.ELBOW, new StartingPosition(1), Direction.LEFT);
+        Tile j3 = new Tile(TileKind.ELBOW, new StartingPosition(2), Direction.UP);
+        Tile j4 = new Tile(TileKind.ELBOW, new StartingPosition(3), Direction.DOWN);
 
         mb.addFixedTile(0, 0, j1);
         mb.addFixedTile(6, 6, j2);
