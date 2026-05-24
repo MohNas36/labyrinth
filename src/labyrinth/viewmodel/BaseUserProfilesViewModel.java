@@ -25,12 +25,15 @@ public class BaseUserProfilesViewModel implements UserProfilesViewModel {
 
         this.userProfiles = FXCollections.observableArrayList();
         this.selectedUserProfiles = FXCollections.observableArrayList();
+
+        refreshUserProfiles();
+        refreshSelectedUserProfiles();
+
         persistenceService.addUserProfileChangedHandler(playerId -> {
             refreshUserProfiles();
             refreshSelectedUserProfiles();
         });
 
-        // Quand les joueurs dans les slots changent, on met à jour les profils sélectionnés
         for (Slot slot : game.getSlots()) {
             slot.playerProperty().addListener(observable -> refreshSelectedUserProfiles());
         }
