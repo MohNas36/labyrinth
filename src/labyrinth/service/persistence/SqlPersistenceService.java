@@ -188,4 +188,27 @@ public class SqlPersistenceService {
             throw new SqlException("Impossible de sauvegarder la partie", e);
         }
     }
+
+    public GameDTO loadLatestGame() {
+        String sql = """
+            SELECT data
+            FROM games
+            ORDER BY timestamp DESC
+            LIMIT 1
+            """;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                String data = resultSet.getString("data");
+                return serializationService.deserialize(data);
+            }
+
+            return null;
+
+        } catch (SQLException e) {
+            throw new SqlException("Impossible de charger la dernière partie", e);
+        }
+    }
 }
