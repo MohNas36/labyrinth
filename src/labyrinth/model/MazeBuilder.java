@@ -29,29 +29,29 @@ public class MazeBuilder {
         return this;
     }
 
-    public Maze build(){
+    public Maze build() {
         List<Tile> L = new ArrayList<>();
         L.addAll(freeTiles);
         Collections.shuffle(L);
 
-        for(int i = 0; i < L.size(); i++) {
+        for (int i = 0; i < L.size(); i++) {
             int n = (int) (Math.random() * 4);
             Tile tile = L.get(i);
             L.set(i, new Tile(tile.getKind(), tile.getContent(), tile.getOrientation().getRotated(n)));
         }
 
         int i = 0;
-        for(int x = 0; x < tiles.getWidth(); x++){
-            for(int y = 0; y < tiles.getHeight(); y++){
-                if(tiles.get(x, y) == null && L.size() > 1){
+
+        for (int x = 0; x < tiles.getWidth(); x++) {
+            for (int y = 0; y < tiles.getHeight(); y++) {
+                if (tiles.get(x, y) == null) {
                     tiles.set(x, y, L.get(i));
                     i++;
                 }
             }
         }
 
-        Tile extraTile = L.get(0);
-
+        Tile extraTile = L.get(i);
 
         return new Maze(this.tiles, extraTile, this.fixRows, this.fixCols);
     }
