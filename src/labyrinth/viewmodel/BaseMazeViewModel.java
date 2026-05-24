@@ -40,8 +40,13 @@ public class BaseMazeViewModel implements MazeViewModel{
         this.extraTile = new BaseTileViewModel(game.getMaze().getExtraTile(), game);
 
         this.forbiddenMove.set(game.getMaze().getForbiddenMove());
+
         game.getMaze().forbiddenMoveProperty().addListener((obs, oldForbiddenMove, newForbiddenMove) -> {
-            this.forbiddenMove.set(newForbiddenMove);
+            if (newForbiddenMove == null) {
+                this.forbiddenMove.set(null);
+            } else {
+                this.forbiddenMove.set(newForbiddenMove.getOpposite());
+            }
         });
 
         slots = new HashMap<>();

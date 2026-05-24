@@ -156,78 +156,91 @@ public class Maze {
         return this.forbiddenMove.getValue().getOpposite();
     }
 
-    public void move(MazeMove mazeMove){
+    public void move(MazeMove mazeMove) {
 
-        if(mazeMove == null){
+        if (mazeMove == null) {
             throw new IllegalArgumentException("Le déplacement est null");
         }
 
         Direction direction = mazeMove.direction();
         int index = mazeMove.index();
 
-        if(index < 0 || index >= tiles.getWidth()){
+        if (index < 0 || index >= tiles.getWidth()) {
             throw new IllegalArgumentException("Index hors bornes");
         }
 
-        if((direction == Direction.LEFT || direction == Direction.RIGHT) && fixedRows.contains(index)){
+        if ((direction == Direction.LEFT || direction == Direction.RIGHT) && fixedRows.contains(index)) {
             throw new IllegalArgumentException("Ligne fixe");
         }
 
-        if((direction == Direction.UP || direction == Direction.DOWN) && fixedColumns.contains(index)){
+        if ((direction == Direction.UP || direction == Direction.DOWN) && fixedColumns.contains(index)) {
             throw new IllegalArgumentException("Colonne fixe");
         }
 
-        if(getForbiddenMove() != null && getForbiddenMove().equals(mazeMove)){
+        if (getForbiddenMove() != null && getForbiddenMove().equals(mazeMove)) {
             throw new IllegalArgumentException("Déplacement interdit");
         }
 
-        Tile expelled = this.extraTile.getValue();
-        SimpleObservableValue<Tile> oldExtra = this.extraTile;
+        Tile insertedTile = this.extraTile.getValue();
+        SimpleObservableValue<Tile> insertedObservable = new SimpleObservableValue<>(insertedTile);
+        Tile expelled;
 
         switch (direction) {
-            case RIGHT ->
-                {
-                expelled = this.tiles.get(index, tiles.getWidth() - 1).getValue();
-                    for (int i = tiles.getWidth() - 1; i > 0; i--) {
-                        this.tiles.set(index, i, this.tiles.get(index, i + 1));
-                    }
-                    this.tiles.set(index, 0, oldExtra);
-                    this.extraTile.setValue(expelled);
-                }
-            case LEFT -> {
-                expelled = this.tiles.get(index, 0).getValue();
-                for (int i = 0; i < tiles.getWidth() - 1; i++) {
-                    this.tiles.set(index, i, this.tiles.get(index, i - 1));
-                }
-                this.tiles.set(index, tiles.getWidth() - 1, oldExtra);
-                this.extraTile.setValue(expelled);
-            }
-            case DOWN -> {
-                expelled = this.tiles.get(tiles.getHeight() - 1, index).getValue();
-                for (int i = tiles.getHeight() - 1; i > 0; i--) {
-                    this.tiles.set(i, index, tiles.get(i - 1, index));
-                }
-                this.tiles.set(0, index, oldExtra);
-                this.extraTile.setValue(expelled);
-            }
-            case UP -> {
+
+            case RIGHT -> {
                 expelled = this.tiles.get(0, index).getValue();
-                for (int i = 0; i < tiles.getHeight() - 1; i++) {
-                    this.tiles.set(i, index, this.tiles.get(i + 1, index));
+
+                for (int x = 0; x < tiles.getWidth() - 1; x++) {
+                    this.tiles.set(x, index, this.tiles.get(x + 1, index));
                 }
-                this.tiles.set(this.tiles.getHeight() - 1, index, oldExtra);
-                this.extraTile.setValue(expelled);
+
+                this.tiles.set(tiles.getWidth() - 1, index, insertedObservable);
             }
-            default -> {
-                throw new IllegalArgumentException("Direction Invalide");
+
+            case LEFT -> {
+                expelled = this.tiles.get(tiles.getWidth() - 1, index).getValue();
+
+                for (int x = tiles.getWidth() - 1; x > 0; x--) {
+                    this.tiles.set(x, index, this.tiles.get(x - 1, index));
+                }
+
+                this.tiles.set(0, index, insertedObservable);
+            }
+
+            case DOWN -> {
+                expelled = this.tiles.get(index, 0).getValue();
+
+                for (int y = 0; y < tiles.getHeight() - 1; y++) {
+                    this.tiles.set(index, y, this.tiles.get(index, y + 1));
+                }
+
+                this.tiles.set(index, tiles.getHeight() - 1, insertedObservable);
+            }
+
+            case UP -> {
+                expelled = this.tiles.get(index, tiles.getHeight() - 1).getValue();
+
+                for (int y = tiles.getHeight() - 1; y > 0; y--) {
+                    this.tiles.set(index, y, this.tiles.get(index, y - 1));
+                }
+
+                this.tiles.set(index, 0, insertedObservable);
+            }
+
+            default -> throw new IllegalArgumentException("Direction invalide");
+        }
+
+        if (!expelled.getPlayers().isEmpty()) {
+            List<Player> players = new ArrayList<>(expelled.getPlayers());
+
+            for (Player player : players) {
+                expelled.removePlayer(player);
+                insertedTile.addPlayer(player);
             }
         }
-        if(expelled.getPlayers() != null ){
-            for(Player p : expelled.getPlayers()){
-                this.extraTile.getValue().removePlayer(p);
-                oldExtra.getValue().addPlayer(p);
-            }
-        }
+
+        this.extraTile.setValue(expelled);
+        this.forbiddenMove.setValue(mazeMove);
     }
 
     public static Maze from(MazeDTO mazeDTO, List<Player> players){
