@@ -77,7 +77,7 @@ public class BaseTileViewModel implements TileViewModel{
     }
 
     public void rotate(int nbTimes){
-        setDirection(getDirection().getRotated(nbTimes));
+        tile.rotate(nbTimes);
     }
 
     @Override

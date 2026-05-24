@@ -25,7 +25,7 @@ public class BaseGameViewModel implements GameViewModel {
         this.game = game;
         this.services = services;
         this.playerViewModels = new ArrayList<>();
-        mazeViewModel.set(new BaseMazeViewModel(game));
+        mazeViewModel.set(new BaseMazeViewModel(game, this));
         this.playerViewModels.add(new BasePlayerViewModel(game, 0));
         this.playerViewModels.add(new BasePlayerViewModel(game, 1));
         this.playerViewModels.add(new BasePlayerViewModel(game, 2));
@@ -105,7 +105,7 @@ public class BaseGameViewModel implements GameViewModel {
     }
 
     public void rebuildMazeViewModel() {
-        mazeViewModel.set(new BaseMazeViewModel(game));
+        mazeViewModel.set(new BaseMazeViewModel(game, this));
 
         state.set(game.getGameState());
 
