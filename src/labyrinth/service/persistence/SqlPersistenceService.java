@@ -74,6 +74,28 @@ public class SqlPersistenceService {
         }
     }
 
+    public List<UserProfile> getUserProfiles() {
+        List<UserProfile> profiles = new ArrayList<>();
+
+        String sql = "SELECT id, name FROM profiles";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                UUID uuid = UUID.fromString(resultSet.getString("id"));
+                String name = resultSet.getString("name");
+
+                profiles.add(new UserProfile(uuid, name));
+            }
+
+            return profiles;
+
+        } catch (SQLException e) {
+            throw new SqlException("Impossible de récupérer les profils utilisateurs", e);
+        }
+    }
+
 
     public void addUserProfileChangedHandler(UserProfileChangedHandler handler) {
         handlers.add(handler);
