@@ -134,6 +134,21 @@ public class SqlPersistenceService {
         }
     }
 
+    public void deleteUserProfile(UUID userId) {
+        String sql = "DELETE FROM profiles WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, userId.toString());
+
+            statement.executeUpdate();
+
+            firePlayerInfoChanged(userId);
+
+        } catch (SQLException e) {
+            throw new SqlException("Impossible de supprimer le profil utilisateur", e);
+        }
+    }
+
 
     public void addUserProfileChangedHandler(UserProfileChangedHandler handler) {
         handlers.add(handler);
