@@ -5,12 +5,10 @@ import labyrinth.service.serialization.SerializationService;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SqlPersistenceService {
 
@@ -52,6 +50,42 @@ public class SqlPersistenceService {
 
         } catch (IOException | SQLException e) {
             throw new SqlException("Erreur lors de l'initialisation de la base de données", e);
+        }
+    }
+
+
+    public UUID createUserProfile(String name){
+        UUID uuid = UUID.randomUUID();
+
+        String sql = "INSERT INTO profiles (id, name) VALUES (?, ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            statement.setString(2, name);
+
+            statement.executeUpdate();
+
+            firePlayerInfoChanged(uuid);
+
+            return uuid;
+
+        } catch (SQLException e) {
+            throw new SqlException("Impossible de créer le profil utilisateur", e);
+        }
+    }
+
+
+    public void addUserProfileChangedHandler(UserProfileChangedHandler handler) {
+        handlers.add(handler);
+    }
+
+    public void removeUserProfileChangedHandler(UserProfileChangedHandler handler) {
+        handlers.remove(handler);
+    }
+
+    private void firePlayerInfoChanged(UUID playerId) {
+        for (UserProfileChangedHandler handler : handlers) {
+            handler.handlePlayerInfoChanged(playerId);
         }
     }
 }
