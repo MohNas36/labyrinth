@@ -7,10 +7,12 @@ public class DefaultDialogService implements DialogService {
 
     private final SimpleObservableValue<Message> message;
     private final SimpleObservableValue<FileRequest> fileRequest;
+    private SimpleObservableValue<ProfilesManagerRequest> profilesManagerRequest;
 
     public DefaultDialogService() {
         this.message = new SimpleObservableValue<>(null);
         this.fileRequest = new SimpleObservableValue<>(null);
+        this.profilesManagerRequest = new SimpleObservableValue<>(null);
     }
 
     @Override
@@ -45,5 +47,15 @@ public class DefaultDialogService implements DialogService {
     @Override
     public ObservableValue<FileRequest> fileRequestProperty() {
         return fileRequest.asReadOnly();
+    }
+
+    @Override
+    public void requestShowProfilesManager() {
+        profilesManagerRequest.setValue(new ProfilesManagerRequest());
+    }
+
+    @Override
+    public ObservableValue<ProfilesManagerRequest> profilesManagerRequestProperty() {
+        return profilesManagerRequest.asReadOnly();
     }
 }

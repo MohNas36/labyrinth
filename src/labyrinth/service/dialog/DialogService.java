@@ -18,4 +18,8 @@ public interface DialogService {
 
     ObservableValue<FileRequest> fileRequestProperty();
 
+    void requestShowProfilesManager();
+
+    ObservableValue<ProfilesManagerRequest> profilesManagerRequestProperty();
+
 }
