@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 
 import java.util.List;
 import java.util.OptionalInt;
+import java.util.UUID;
 
 public interface PlayerViewModel {
 
@@ -44,6 +45,8 @@ public interface PlayerViewModel {
     void addBot();
 
     void removePlayer();
+
+    void addPlayer(UUID uuid);
 
 
 }
