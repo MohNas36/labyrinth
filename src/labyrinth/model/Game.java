@@ -85,7 +85,7 @@ public class Game {
                 slot.close();
             }
         }
-        this.paths = null;
+        this.paths.setValue(null);
     }
 
     public void init(){
@@ -204,8 +204,9 @@ public class Game {
 
     public Paths<Tile> getPaths(){
         if(gameState.getValue() == GameState.SETUP){
-            paths = null;
+            return null;
         }
+
         return paths.getValue();
     }
 
