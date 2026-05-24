@@ -31,7 +31,7 @@ public class MenuView extends MenuBar {
         helpMenu.getItems().addAll(aboutItem);
         editMenu.getItems().addAll(manageProfilesItem);
 
-        getMenus().addAll(fileMenu, helpMenu);
+        getMenus().addAll(fileMenu, helpMenu, editMenu);
 
     }
 }

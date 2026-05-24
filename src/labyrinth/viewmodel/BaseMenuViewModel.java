@@ -92,7 +92,8 @@ public class BaseMenuViewModel implements MenuViewModel{
 
     @Override
     public void showProfilesManager() {
-        services.getDialogService().profilesManagerRequestProperty();
+        System.out.println("BaseMenuViewModel : showProfilesManager appelé");
+        services.getDialogService().requestShowProfilesManager();
     }
 
     @Override

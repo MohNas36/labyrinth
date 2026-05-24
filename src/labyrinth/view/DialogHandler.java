@@ -3,10 +3,7 @@ package labyrinth.view;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import labyrinth.service.dialog.DialogService;
-import labyrinth.service.dialog.FileRequest;
-import labyrinth.service.dialog.Message;
-import labyrinth.service.dialog.Mode;
+import labyrinth.service.dialog.*;
 
 import java.io.File;
 
@@ -30,6 +27,14 @@ public class DialogHandler {
             Message message = dialogService.messageProperty().getValue();
             if(message != null) {
                 handleMessage(message);
+            }
+        });
+
+        dialogService.profilesManagerRequestProperty().addListener(observable -> {
+            ProfilesManagerRequest request = dialogService.profilesManagerRequestProperty().getValue();
+
+            if(request != null) {
+                handleProfilesManagerRequest(request);
             }
         });
     }
@@ -65,4 +70,9 @@ public class DialogHandler {
         alert.showAndWait();
     }
 
+
+    private void handleProfilesManagerRequest(ProfilesManagerRequest request) {
+        profilesManagerWindow.show();
+        profilesManagerWindow.toFront();
+    }
 }
