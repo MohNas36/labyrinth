@@ -118,6 +118,22 @@ public class SqlPersistenceService {
         }
     }
 
+    public void setUserName(UUID userId, String name) {
+        String sql = "UPDATE profiles SET name = ? WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name);
+            statement.setString(2, userId.toString());
+
+            statement.executeUpdate();
+
+            firePlayerInfoChanged(userId);
+
+        } catch (SQLException e) {
+            throw new SqlException("Impossible de modifier le nom du profil utilisateur", e);
+        }
+    }
+
 
     public void addUserProfileChangedHandler(UserProfileChangedHandler handler) {
         handlers.add(handler);
