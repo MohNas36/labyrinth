@@ -25,7 +25,7 @@ public class Services {
         return serializationService;
     }
 
-    public SqlPersistenceService getSqlPersistenceService() {
+    public SqlPersistenceService getPersistenceService() {
         return sqlPersistenceService;
     }
 }

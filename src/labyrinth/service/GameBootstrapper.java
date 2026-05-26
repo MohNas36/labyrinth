@@ -8,8 +8,8 @@ public class GameBootstrapper {
     private final SaveService  saveService;
 
     public GameBootstrapper(Services services) {
-        this.gameInitialiser = new GameInitialiser(services.getSqlPersistenceService());
-        this.saveService = new SaveService(services.getSqlPersistenceService());
+        this.gameInitialiser = new GameInitialiser(services.getPersistenceService());
+        this.saveService = new SaveService(services.getPersistenceService());
     }
 
     public Game bootstrap() {

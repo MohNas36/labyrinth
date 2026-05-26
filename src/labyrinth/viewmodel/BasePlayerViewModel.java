@@ -55,6 +55,16 @@ public class BasePlayerViewModel implements PlayerViewModel{
             refreshPlayer();
         });
 
+        persistenceService.addUserProfileChangedHandler(playerId -> {
+            Slot slot = game.getSlots().get(index);
+
+            if (slot.getPlayer() != null
+                    && slot.getPlayer().getUuid() != null
+                    && slot.getPlayer().getUuid().equals(playerId)) {
+                refreshName();
+            }
+        });
+
     }
 
     private void refresh() {

@@ -31,12 +31,12 @@ public class BaseGameViewModel implements GameViewModel {
         } else {
             mazeViewModel.set(new BaseMazeViewModel(game, this));
         }
-        this.playerViewModels.add(new BasePlayerViewModel(game, 0, services.getSqlPersistenceService()));
-        this.playerViewModels.add(new BasePlayerViewModel(game, 1,  services.getSqlPersistenceService()));
-        this.playerViewModels.add(new BasePlayerViewModel(game, 2 ,  services.getSqlPersistenceService()));
-        this.playerViewModels.add(new BasePlayerViewModel(game, 3, services.getSqlPersistenceService()));
+        this.playerViewModels.add(new BasePlayerViewModel(game, 0, services.getPersistenceService()));
+        this.playerViewModels.add(new BasePlayerViewModel(game, 1,  services.getPersistenceService()));
+        this.playerViewModels.add(new BasePlayerViewModel(game, 2 ,  services.getPersistenceService()));
+        this.playerViewModels.add(new BasePlayerViewModel(game, 3, services.getPersistenceService()));
         menuViewModel = new BaseMenuViewModel(game, services, this);
-        this.userProfilesViewModel = new BaseUserProfilesViewModel(game , services.getSqlPersistenceService());
+        this.userProfilesViewModel = new BaseUserProfilesViewModel(game , services.getPersistenceService());
     }
 
     public void setTitle(String title){

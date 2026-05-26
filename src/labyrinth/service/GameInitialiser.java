@@ -17,6 +17,8 @@ public class GameInitialiser {
 
         if (gameDTO != null) {
             game.updateFrom(gameDTO);
+        } else {
+            game.init();
         }
     }
 
