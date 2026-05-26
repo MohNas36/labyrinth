@@ -1,5 +1,7 @@
 package labyrinth.model;
 
+import labyrinth.model.strategy.PlayStrategy;
+import labyrinth.model.strategy.StubPlayStrategy;
 import labyrinth.service.serialization.GameDTO;
 import labyrinth.service.serialization.PlayerDTO;
 import labyrinth.util.collection.Grid;
@@ -22,6 +24,8 @@ public class Game {
     private SimpleObservableValue<Integer> currentPlayerIndex;
     private SimpleObservableValue<Player> currentPlayer;
     private UUID uuid;
+
+    public static final PlayStrategy STRATEGY = new StubPlayStrategy();
 
     public Game() {
         this.maze = new SimpleObservableValue<>(null);
