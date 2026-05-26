@@ -22,6 +22,8 @@ public class DefaultPlayStrategy implements PlayStrategy {
     private static final int NB_RANDOM_MOVES = 4;
     private static final int NB_SIMULATIONS = 6;
     private static final double ALPHA = 0.5;
+    private static final int NB_CANDIDATS = 8;
+    private static final int MAX_PROFONDEUR = 4;
 
     @Override
     public Move getNextMove(GameDTO snapshot) {
@@ -35,8 +37,20 @@ public class DefaultPlayStrategy implements PlayStrategy {
             return null;
         }
 
-        // TODO
-        return null;
+        List<ScoredMove> moves = computeMoves();
+
+        if (moves.isEmpty()) {
+            return null;
+        }
+
+        List<ScoredMove> candidates = getBestCandidates(moves, NB_CANDIDATS);
+        List<ScoredMove> adjustedMoves = new ArrayList<>();
+
+        for (ScoredMove scoredMove : candidates) {
+            adjustedMoves.add(adjust(scoredMove, MAX_PROFONDEUR));
+        }
+
+        return getBestMove(adjustedMoves);
     }
 
     private int getScore(){
@@ -215,6 +229,36 @@ public class DefaultPlayStrategy implements PlayStrategy {
         game.undoLastMove();
 
         return new ScoredMove(scoredMove.move(), adjustedScore);
+    }
+
+    private List<ScoredMove> getBestCandidates(List<ScoredMove> moves, int nb) {
+        List<ScoredMove> candidates = new ArrayList<>();
+
+        for (ScoredMove move : moves) {
+            if (candidates.size() < nb) {
+                candidates.add(move);
+            } else {
+                int worstIndex = getWorstIndex(candidates);
+
+                if (move.score() > candidates.get(worstIndex).score()) {
+                    candidates.set(worstIndex, move);
+                }
+            }
+        }
+
+        return candidates;
+    }
+
+    private int getWorstIndex(List<ScoredMove> moves) {
+        int worstIndex = 0;
+
+        for (int i = 1; i < moves.size(); i++) {
+            if (moves.get(i).score() < moves.get(worstIndex).score()) {
+                worstIndex = i;
+            }
+        }
+
+        return worstIndex;
     }
 
 }
