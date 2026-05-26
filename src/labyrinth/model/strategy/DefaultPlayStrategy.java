@@ -11,11 +11,14 @@ import labyrinth.util.graph.Paths;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class DefaultPlayStrategy implements PlayStrategy {
 
     private GameSimulation game;
     private PlayerSimulation initialPlayer;
+
+    private final Random random = new Random();
 
     @Override
     public Move getNextMove(GameDTO snapshot) {
@@ -82,6 +85,57 @@ public class DefaultPlayStrategy implements PlayStrategy {
 
         return moves;
 
+    }
+
+    private ScoredMove getRandomMove() {
+        List<MazeMove> mazeMoves = game.getValidMazeMoves();
+
+        if (mazeMoves.isEmpty()) {
+            return null;
+        }
+
+        MazeMove mazeMove = mazeMoves.get(random.nextInt(mazeMoves.size()));
+        int nbRotations = random.nextInt(4);
+
+        game.modifyMaze(nbRotations, mazeMove);
+
+        Paths<TileSimulation> paths = game.computePaths();
+        PlayerSimulation currentPlayer = game.getCurrentPlayer();
+
+        List<TileSimulation> bestDestinations = new ArrayList<>();
+        int bestDistance = Integer.MAX_VALUE;
+
+        for (Grid.Entry<TileSimulation> entry : game.getMaze().getTiles()) {
+            TileSimulation tile = entry.value();
+
+            if (paths.isAccessible(tile)) {
+                int distance = game.getDistanceToTarget(tile.getPosition(), currentPlayer);
+
+                if (distance < bestDistance) {
+                    bestDistance = distance;
+                    bestDestinations.clear();
+                    bestDestinations.add(tile);
+                } else if (distance == bestDistance) {
+                    bestDestinations.add(tile);
+                }
+            }
+        }
+
+        if (bestDestinations.isEmpty()) {
+            game.undoLastMazeModification();
+            return null;
+        }
+
+        TileSimulation destinationTile = bestDestinations.get(random.nextInt(bestDestinations.size()));
+        Move move = new Move(nbRotations, mazeMove, destinationTile.getPosition());
+
+        game.movePlayer(destinationTile);
+
+        int score = getScore();
+
+        game.undoLastMove();
+
+        return new ScoredMove(move, score);
     }
 
 }
