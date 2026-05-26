@@ -1,5 +1,6 @@
 package labyrinth.model;
 
+import labyrinth.model.strategy.Move;
 import labyrinth.model.strategy.PlayStrategy;
 import labyrinth.model.strategy.StubPlayStrategy;
 import labyrinth.service.serialization.GameDTO;
@@ -95,6 +96,33 @@ public class Game {
         this.paths.setValue(null);
     }
 
+    public void startTurn(){
+        Player currentPlayer = getCurrentPlayer();
+
+        if(currentPlayer == null){
+            return;
+        }
+
+        if(!currentPlayer.isBot()){
+            return;
+        }
+
+        if(gameState.getValue() != GameState.SETUP){
+            return;
+        }
+
+        Move move = STRATEGY.getNextMove(new GameDTO(this));
+        rotateExtraTile(move.nbRotations());
+        mazeMove(move.mazeMove());
+
+        Tile destination = maze.getValue().getTiles().get(move.destination());
+        movePlayer(destination);
+
+        if(gameState.getValue() == GameState.TURN_END){
+            endTurn();
+        }
+    }
+
     public void init(){
         if(gameState.getValue() != GameState.SETUP){
             throw new IllegalStateException("Le jeu n'est pas dans SETUP");
@@ -143,6 +171,8 @@ public class Game {
 
         this.gameState.setValue(GameState.MAZE_MOVE);
         updatePaths();
+
+        startTurn();
     }
 
     public void rotateExtraTile(int nbTimes){
@@ -180,6 +210,8 @@ public class Game {
         currentPlayer.setValue(slots.get(currentPlayerIndex.getValue()).getPlayer());
         gameState.setValue(GameState.MAZE_MOVE);
         updatePaths();
+
+        startTurn();
     }
 
     public void mazeMove(MazeMove mazeMove){
