@@ -14,10 +14,11 @@ public class SaveService {
         this.sqlPersistenceService = sqlPersistenceService;
     }
 
-    public void attach(Game game){
-        game.stateProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue == GameState.TURN_END || newValue == GameState.GAME_OVER){
-                saveGame(game);
+
+    public void attach(Game game) {
+        game.stateProperty().addListener((obs, oldState, newState) -> {
+            if (oldState == GameState.TURN_END && newState == GameState.MAZE_MOVE) {
+                sqlPersistenceService.saveGame(new GameDTO(game));
             }
         });
     }
