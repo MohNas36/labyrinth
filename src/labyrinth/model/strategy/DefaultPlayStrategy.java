@@ -138,4 +138,39 @@ public class DefaultPlayStrategy implements PlayStrategy {
         return new ScoredMove(move, score);
     }
 
+    private Move getBestRandomMove(int nb) {
+        List<ScoredMove> moves = new ArrayList<>();
+
+        for (int i = 0; i < nb; i++) {
+            ScoredMove move = getRandomMove();
+
+            if (move != null) {
+                moves.add(move);
+            }
+        }
+
+        return getBestMove(moves);
+    }
+
+    private Move getBestMove(List<ScoredMove> moves) {
+        if (moves.isEmpty()) {
+            return null;
+        }
+
+        int bestScore = moves.get(0).score();
+        List<ScoredMove> bestMoves = new ArrayList<>();
+
+        for (ScoredMove move : moves) {
+            if (move.score() > bestScore) {
+                bestScore = move.score();
+                bestMoves.clear();
+                bestMoves.add(move);
+            } else if (move.score() == bestScore) {
+                bestMoves.add(move);
+            }
+        }
+
+        return bestMoves.get(random.nextInt(bestMoves.size())).move();
+    }
+
 }
