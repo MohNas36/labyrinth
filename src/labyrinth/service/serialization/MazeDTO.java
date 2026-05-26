@@ -39,11 +39,11 @@ public class MazeDTO {
         return forbiddenMove;
     }
 
-    public List<Integer> getFixedColumns() {
+    public List<Integer> getFixColumns() {
         return fixedColumns;
     }
 
-    public List<Integer> getFixedRows() {
+    public List<Integer> getFixRows() {
         return fixedRows;
     }
 

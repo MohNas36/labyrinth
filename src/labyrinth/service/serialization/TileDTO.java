@@ -40,7 +40,7 @@ public class TileDTO {
         return direction;
     }
 
-    public TileKind getKind() {
+    public TileKind getTileKind() {
         return kind;
     }
 

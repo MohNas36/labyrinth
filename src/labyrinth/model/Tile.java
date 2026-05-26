@@ -6,7 +6,6 @@ import labyrinth.util.observable.ObservableValue;
 import labyrinth.util.observable.SimpleObservableList;
 import labyrinth.util.observable.SimpleObservableValue;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -76,7 +75,7 @@ public class Tile{
     }
 
     public static Tile from(TileDTO tileDTO, List<Player> players) {
-        Tile tile = new Tile(tileDTO.getKind(), tileDTO.getContent(), tileDTO.getOrientation());
+        Tile tile = new Tile(tileDTO.getTileKind(), tileDTO.getContent(), tileDTO.getOrientation());
 
         if(tileDTO.getPlayers() != null) {
             for(Integer playerIndex : tileDTO.getPlayers()) {

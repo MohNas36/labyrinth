@@ -257,7 +257,7 @@ public class Maze {
 
         Tile extraTile = Tile.from(mazeDTO.getExtraTile(), players);
 
-        Maze maze = new Maze(tiles, extraTile, new HashSet<>(mazeDTO.getFixedRows()), new HashSet<>(mazeDTO.getFixedColumns()));
+        Maze maze = new Maze(tiles, extraTile, new HashSet<>(mazeDTO.getFixRows()), new HashSet<>(mazeDTO.getFixColumns()));
 
         if(mazeDTO.getForbiddenMove() != null){
             maze.forbiddenMove.setValue(mazeDTO.getForbiddenMove().getOpposite());
