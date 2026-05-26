@@ -28,18 +28,28 @@ public class Slot {
         return p.asReadOnly();
     }
 
-    public void open(){
-        open(null);
+    public void open() {
+        open(null, false);
     }
 
-    public void open(UUID uuid){
-        if(game.getGameState() != GameState.SETUP){
+    public void open(UUID uuid) {
+        open(uuid, false);
+    }
+
+    public void open(boolean isBot) {
+        open(null, isBot);
+    }
+
+    public void open(UUID uuid, boolean isBot) {
+        if (game.getGameState() != GameState.SETUP) {
             throw new IllegalStateException("Le jeu n'est pas dans SETUP");
         }
-        if(p.getValue() != null){
-            throw new IllegalStateException("Le slot contient déja un joueur");
+
+        if (p.getValue() != null) {
+            throw new IllegalStateException("Le slot contient déjà un joueur");
         }
-        this.p.setValue(new Player(index , uuid));
+
+        this.p.setValue(new Player(index, uuid, isBot));
     }
 
     public void close(){

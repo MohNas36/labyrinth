@@ -216,8 +216,14 @@ public class BasePlayerViewModel implements PlayerViewModel{
 
     @Override
     public void addBot() {
-        isActive.set(true);
-        name.set("Bot " + index);
+        Slot slot = game.getSlots().get(index);
+
+        if (slot.getPlayer() != null) {
+            slot.close();
+        }
+
+        slot.open(true);
+        refresh();
     }
 
     @Override
@@ -240,6 +246,11 @@ public class BasePlayerViewModel implements PlayerViewModel{
         }
 
         Player player = slot.getPlayer();
+
+        if (player.isBot()) {
+            name.set("Bot " + (index + 1));
+            return;
+        }
 
         if (player.getUuid() == null) {
             name.set("Joueur " + (index + 1));
