@@ -19,6 +19,7 @@ public class DefaultPlayStrategy implements PlayStrategy {
     private PlayerSimulation initialPlayer;
 
     private final Random random = new Random();
+    private static final int NB_RANDOM_MOVES = 4;
 
     @Override
     public Move getNextMove(GameDTO snapshot) {
@@ -171,6 +172,29 @@ public class DefaultPlayStrategy implements PlayStrategy {
         }
 
         return bestMoves.get(random.nextInt(bestMoves.size())).move();
+    }
+
+    private int simulate(int maxDepth) {
+        int nbMoves = 0;
+
+        while (nbMoves < maxDepth && !game.isGameOver()) {
+            Move move = getBestRandomMove(NB_RANDOM_MOVES);
+
+            if (move == null) {
+                break;
+            }
+
+            game.apply(move);
+            nbMoves++;
+        }
+
+        int score = getScore();
+
+        for (int i = 0; i < nbMoves; i++) {
+            game.undoLastMove();
+        }
+
+        return score;
     }
 
 }
