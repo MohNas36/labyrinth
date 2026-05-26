@@ -20,6 +20,8 @@ public class DefaultPlayStrategy implements PlayStrategy {
 
     private final Random random = new Random();
     private static final int NB_RANDOM_MOVES = 4;
+    private static final int NB_SIMULATIONS = 6;
+    private static final double ALPHA = 0.5;
 
     @Override
     public Move getNextMove(GameDTO snapshot) {
@@ -195,6 +197,24 @@ public class DefaultPlayStrategy implements PlayStrategy {
         }
 
         return score;
+    }
+
+    private ScoredMove adjust(ScoredMove scoredMove, int maxDepth) {
+        game.apply(scoredMove.move());
+
+        int sum = 0;
+
+        for (int i = 0; i < NB_SIMULATIONS; i++) {
+            sum += simulate(maxDepth);
+        }
+
+        int adjustedScore = (int) Math.round(
+                scoredMove.score() + (ALPHA * sum / NB_SIMULATIONS)
+        );
+
+        game.undoLastMove();
+
+        return new ScoredMove(scoredMove.move(), adjustedScore);
     }
 
 }
