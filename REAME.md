@@ -259,6 +259,39 @@ Le trésor reste affiché sur la tuile du plateau, car il fait partie du décor 
 
 ---
 
+## Affichage du deck et de la défausse
+
+Dans le panneau des joueurs, chaque joueur affiche maintenant deux informations liées aux trésors :
+
+```text
+Deck      : prochain trésor à chercher
+Défausse  : trésors déjà trouvés
+```
+
+Par exemple :
+
+```text
+Deck : TR19
+Défausse : vide
+```
+
+signifie que le joueur doit actuellement chercher le trésor `TR19`, et qu’il n’a encore trouvé aucun trésor.
+
+Autre exemple :
+
+```text
+Deck : TR4
+Défausse : TR6, TR0, TR18
+```
+
+signifie que le prochain objectif du joueur est `TR4`, et qu’il a déjà trouvé `TR6`, `TR0` et `TR18`.
+
+Si la défausse est vide, c’est normal : cela veut simplement dire que le joueur n’a encore trouvé aucun trésor.
+
+Si le deck est vide, cela veut dire que le joueur a trouvé tous ses trésors. Il doit alors revenir sur sa propre case de départ pour gagner la partie.
+
+---
+
 ## Conditions de victoire
 
 Un joueur gagne quand :
@@ -345,6 +378,7 @@ Si un bot joue plusieurs coups d’affilée, c’est normal si plusieurs bots se
 
 - Les joueurs sont affichés avec un indice à partir de `0` sur le plateau, mais avec un numéro à partir de `1` dans le menu.
 - Les trésors restent visibles sur les tuiles, même quand ils ont déjà été trouvés par un joueur.
+- Dans le panneau joueur, `Deck` indique le prochain trésor à chercher, tandis que `Défausse` indique les trésors déjà trouvés.
 - Après **File > New**, il faut reconfigurer les bots avant de lancer la partie.
 - Si aucune nouvelle partie n’est créée, **Start game** peut reprendre la dernière partie connue par l’application.
 
