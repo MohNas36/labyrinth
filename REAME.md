@@ -5,6 +5,39 @@ Le but est simple : déplacer son pion dans le labyrinthe, trouver tous ses tré
 
 L’application gère les joueurs humains, les bots, les profils utilisateurs, la sauvegarde/le chargement, ainsi que la reprise automatique de la dernière partie.
 
+
+---
+
+## Lancer l’archive JAR
+
+Une fois le projet exporté sous forme d’archive `.jar`, le fichier à lancer est :
+
+```text
+labyrinth-e84504u-nasralla3u.jar
+```
+
+Comme le projet utilise JavaFX, il faut lancer l’archive avec les options JavaFX.
+
+Commande à utiliser :
+
+```bash
+java --module-path /chemin/vers/javafx-sdk/lib --add-modules javafx.controls,javafx.fxml -jar labyrinth-e84504u-nasralla3u.jar
+```
+
+Il faut remplacer :
+
+```text
+/chemin/vers/javafx-sdk/lib
+```
+
+par le chemin du dossier `lib` de JavaFX sur la machine utilisée.
+
+Par exemple, si JavaFX est dans le dossier `javafx-sdk-23.0.2/lib`, la commande ressemble à :
+
+```bash
+java --module-path javafx-sdk-23.0.2/lib --add-modules javafx.controls,javafx.fxml -jar labyrinth-e84504u-nasralla3u.jar
+```
+
 ---
 
 ## Lancement d’une partie

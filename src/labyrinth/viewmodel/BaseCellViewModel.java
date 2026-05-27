@@ -78,10 +78,17 @@ public class BaseCellViewModel implements CellViewModel{
 
         game.movePlayer(target);
 
+        if (game.getGameState() == GameState.GAME_OVER) {
+            gameViewModel.rebuildMazeViewModel();
+            gameViewModel.refreshPlayers();
+            gameViewModel.showWinnerMessage();
+            return;
+        }
+
         if (game.getGameState() == GameState.TURN_END) {
             game.endTurn();
+
             gameViewModel.rebuildMazeViewModel();
-            gameViewModel.showCurrentPlayerMessage();
             gameViewModel.refreshPlayers();
 
             if (game.getGameState() == GameState.GAME_OVER) {
