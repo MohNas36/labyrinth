@@ -18,7 +18,7 @@ public class TileView extends StackPane {
     private Label playersLabel;
     private Label currentPlayerLabel;
     private final String SP_STYLE = "-fx-background-color: red; -fx-border-color: black; -fx-font-size: 12"; // rouge pour la position de depart
-    private final String TREASURE_STYLE = "-fx-background-color: blue; -fx-border-color: black; -fx-font-size: 12"; // bleu pour les tresors
+    private final String TREASURE_STYLE = "-fx-background-color: lightgreen; -fx-text-fill: black; -fx-border-color: black; -fx-font-size: 12";
     private final String PLAYERS_STYLE = "-fx-background-color: yellow; -fx-border-color: black; -fx-font-size: 12";// jaune pour les joueurs
     private final String CURRENT_STYLE = "-fx-background-color: white; -fx-border-color: black; -fx-font-size: 12";// vert pour le joueur courant
 

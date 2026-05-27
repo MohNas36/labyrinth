@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import labyrinth.model.Game;
 import labyrinth.model.GameState;
+import labyrinth.model.Player;
 import labyrinth.service.Services;
 
 import java.util.ArrayList;
@@ -165,6 +166,14 @@ public class BaseGameViewModel implements GameViewModel {
             if (playerViewModel instanceof BasePlayerViewModel basePlayerViewModel) {
                 basePlayerViewModel.refresh();
             }
+        }
+    }
+
+    public void showWinnerMessage() {
+        if (game.getGameState() == GameState.GAME_OVER && game.getCurrentPlayer() != null) {
+            services.getDialogService().publishMessage(
+                    getPlayerLabel(game.getCurrentPlayer()) + " a gagné la partie !"
+            );
         }
     }
 }

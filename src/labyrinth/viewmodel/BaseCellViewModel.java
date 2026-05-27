@@ -83,6 +83,12 @@ public class BaseCellViewModel implements CellViewModel{
             gameViewModel.rebuildMazeViewModel();
             gameViewModel.showCurrentPlayerMessage();
             gameViewModel.refreshPlayers();
+
+            if (game.getGameState() == GameState.GAME_OVER) {
+                gameViewModel.showWinnerMessage();
+            } else {
+                gameViewModel.showCurrentPlayerMessage();
+            }
         }
 
         System.out.println("Mouvement du joueur vers : " + position);

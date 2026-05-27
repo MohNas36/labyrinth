@@ -242,9 +242,17 @@ public class Game {
         Tile tileJoueur = maze.getValue().getTile(getCurrentPlayer());
         tileJoueur.removePlayer(getCurrentPlayer());
         tile.addPlayer(getCurrentPlayer());
-        if(getCurrentPlayer().getDeck().getDrawPile().isEmpty() && tile.getContent() instanceof StartingPosition pos && pos.index() == currentPlayerIndex.getValue()){
+
+        Player player = getCurrentPlayer();
+        Deck deck = player.getDeck();
+
+        if(tile.getContent() instanceof Treasure treasure && !deck.getDrawPile().isEmpty() && deck.getDrawPile().getFirst() == treasure.id()) {
+            deck.discard();
+        }
+
+        if(deck.getDrawPile().isEmpty() && tile.getContent() instanceof StartingPosition pos && pos.index() == currentPlayerIndex.getValue()) {
             this.gameState.setValue(GameState.GAME_OVER);
-        }else{
+        } else {
             this.gameState.setValue(GameState.TURN_END);
         }
     }
