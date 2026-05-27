@@ -9,6 +9,17 @@ import labyrinth.util.collection.Position;
 import labyrinth.util.graph.Paths;
 
 public class StubPlayStrategy implements PlayStrategy {
+
+    /**
+     * Renvoie un coup très simple et valide.
+     *
+     * Cette stratégie ne cherche pas à jouer intelligemment.
+     * Elle sert surtout à vérifier que les bots peuvent jouer automatiquement :
+     * - on prend le premier déplacement de labyrinthe possible ;
+     * - on ne tourne pas la tuile libre ;
+     * - on choisit une première tuile accessible comme destination.
+     */
+
     @Override
     public Move getNextMove(GameDTO game) {
         GameSimulation gameSimulation = new GameSimulation(game);
