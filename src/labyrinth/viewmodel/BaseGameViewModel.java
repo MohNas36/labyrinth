@@ -103,6 +103,10 @@ public class BaseGameViewModel implements GameViewModel {
         if(game.getCurrentPlayer() != null) {
             this.currentPlayerId.set(game.getCurrentPlayer().getIndex());
         }
+
+        if (game.getGameState() == GameState.GAME_OVER) {
+            showWinnerMessage();
+        }
     }
 
     @Override

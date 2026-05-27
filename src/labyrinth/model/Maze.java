@@ -153,7 +153,7 @@ public class Maze {
         if(this.forbiddenMove.getValue() == null){
             return null;
         }
-        return this.forbiddenMove.getValue().getOpposite();
+        return this.forbiddenMove.getValue();
     }
 
     public void move(MazeMove mazeMove) {
@@ -188,16 +188,6 @@ public class Maze {
         switch (direction) {
 
             case RIGHT -> {
-                expelled = this.tiles.get(0, index).getValue();
-
-                for (int x = 0; x < tiles.getWidth() - 1; x++) {
-                    this.tiles.set(x, index, this.tiles.get(x + 1, index));
-                }
-
-                this.tiles.set(tiles.getWidth() - 1, index, insertedObservable);
-            }
-
-            case LEFT -> {
                 expelled = this.tiles.get(tiles.getWidth() - 1, index).getValue();
 
                 for (int x = tiles.getWidth() - 1; x > 0; x--) {
@@ -207,17 +197,17 @@ public class Maze {
                 this.tiles.set(0, index, insertedObservable);
             }
 
-            case DOWN -> {
-                expelled = this.tiles.get(index, 0).getValue();
+            case LEFT -> {
+                expelled = this.tiles.get(0, index).getValue();
 
-                for (int y = 0; y < tiles.getHeight() - 1; y++) {
-                    this.tiles.set(index, y, this.tiles.get(index, y + 1));
+                for (int x = 0; x < tiles.getWidth() - 1; x++) {
+                    this.tiles.set(x, index, this.tiles.get(x + 1, index));
                 }
 
-                this.tiles.set(index, tiles.getHeight() - 1, insertedObservable);
+                this.tiles.set(tiles.getWidth() - 1, index, insertedObservable);
             }
 
-            case UP -> {
+            case DOWN -> {
                 expelled = this.tiles.get(index, tiles.getHeight() - 1).getValue();
 
                 for (int y = tiles.getHeight() - 1; y > 0; y--) {
@@ -225,6 +215,16 @@ public class Maze {
                 }
 
                 this.tiles.set(index, 0, insertedObservable);
+            }
+
+            case UP -> {
+                expelled = this.tiles.get(index, 0).getValue();
+
+                for (int y = 0; y < tiles.getHeight() - 1; y++) {
+                    this.tiles.set(index, y, this.tiles.get(index, y + 1));
+                }
+
+                this.tiles.set(index, tiles.getHeight() - 1, insertedObservable);
             }
 
             default -> throw new IllegalArgumentException("Direction invalide");
@@ -240,7 +240,7 @@ public class Maze {
         }
 
         this.extraTile.setValue(expelled);
-        this.forbiddenMove.setValue(mazeMove);
+        this.forbiddenMove.setValue(mazeMove.getOpposite());
     }
 
     public static Maze from(MazeDTO mazeDTO, List<Player> players){
@@ -260,7 +260,7 @@ public class Maze {
         Maze maze = new Maze(tiles, extraTile, new HashSet<>(mazeDTO.getFixRows()), new HashSet<>(mazeDTO.getFixColumns()));
 
         if(mazeDTO.getForbiddenMove() != null){
-            maze.forbiddenMove.setValue(mazeDTO.getForbiddenMove().getOpposite());
+            maze.forbiddenMove.setValue(mazeDTO.getForbiddenMove());
         }
 
         return maze;

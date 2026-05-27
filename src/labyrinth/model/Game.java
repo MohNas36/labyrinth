@@ -27,7 +27,7 @@ public class Game {
     private SimpleObservableValue<Player> currentPlayer;
     private UUID uuid;
 
-    public static final PlayStrategy STRATEGY = new StubPlayStrategy();
+    public static final PlayStrategy STRATEGY = new DefaultPlayStrategy();
 
     public Game() {
         this.maze = new SimpleObservableValue<>(null);

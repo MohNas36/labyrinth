@@ -49,25 +49,26 @@ public class BaseMazeViewModel implements MazeViewModel {
         this.forbiddenMove.set(game.getMaze().getForbiddenMove());
 
         game.getMaze().forbiddenMoveProperty().addListener((obs, oldForbiddenMove, newForbiddenMove) -> {
-            if (newForbiddenMove == null) {
-                this.forbiddenMove.set(null);
-            } else {
-                this.forbiddenMove.set(newForbiddenMove.getOpposite());
-            }
+            this.forbiddenMove.set(newForbiddenMove);
         });
 
         this.slots = new HashMap<>();
 
         for (int i = 1; i < grid.getWidth(); i += 2) {
-            MazeMove up = new MazeMove(Direction.UP, i);
-            MazeMove right = new MazeMove(Direction.RIGHT, i);
-            MazeMove down = new MazeMove(Direction.DOWN, i);
-            MazeMove left = new MazeMove(Direction.LEFT, i);
+            MazeMove topSlot = new MazeMove(Direction.UP, i);
+            MazeMove rightSlot = new MazeMove(Direction.RIGHT, i);
+            MazeMove bottomSlot = new MazeMove(Direction.DOWN, i);
+            MazeMove leftSlot = new MazeMove(Direction.LEFT, i);
 
-            slots.put(up, new BaseSlotViewModel(game, up, forbiddenMove, state, extraTile, gameViewModel));
-            slots.put(right, new BaseSlotViewModel(game, right, forbiddenMove, state, extraTile, gameViewModel));
-            slots.put(down, new BaseSlotViewModel(game, down, forbiddenMove, state, extraTile, gameViewModel));
-            slots.put(left, new BaseSlotViewModel(game, left, forbiddenMove, state, extraTile, gameViewModel));
+            MazeMove topAction = new MazeMove(Direction.DOWN, i);
+            MazeMove rightAction = new MazeMove(Direction.LEFT, i);
+            MazeMove bottomAction = new MazeMove(Direction.UP, i);
+            MazeMove leftAction = new MazeMove(Direction.RIGHT, i);
+
+            slots.put(topSlot, new BaseSlotViewModel(game, topAction, forbiddenMove, state, extraTile, gameViewModel));
+            slots.put(rightSlot, new BaseSlotViewModel(game, rightAction, forbiddenMove, state, extraTile, gameViewModel));
+            slots.put(bottomSlot, new BaseSlotViewModel(game, bottomAction, forbiddenMove, state, extraTile, gameViewModel));
+            slots.put(leftSlot, new BaseSlotViewModel(game, leftAction, forbiddenMove, state, extraTile, gameViewModel));
         }
     }
 
