@@ -12,6 +12,12 @@ public class GameBootstrapper {
         this.saveService = new SaveService(services.getPersistenceService());
     }
 
+    /**
+     * Crée et prépare une instance de Game.
+     *
+     * La partie est d'abord créée, puis initialisée avec la dernière sauvegarde
+     * si elle existe. Ensuite, on attache la sauvegarde automatique.
+     */
     public Game bootstrap() {
         Game game = new Game();
 

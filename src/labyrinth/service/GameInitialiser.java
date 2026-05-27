@@ -12,6 +12,14 @@ public class GameInitialiser {
         this.sqlPersistenceService = sqlPersistenceService;
     }
 
+    /**
+     * Initialise la partie au démarrage de l'application.
+     *
+     * Si une dernière partie sauvegardée existe, on recharge cette partie
+     * dans le modèle courant.
+     *
+     * Sinon, on initialise une nouvelle partie normale.
+     */
     public void init(Game game) {
         GameDTO gameDTO = sqlPersistenceService.loadLatestGame();
 
