@@ -19,11 +19,12 @@ public class DefaultPlayStrategy implements PlayStrategy {
     private PlayerSimulation initialPlayer;
 
     private final Random random = new Random();
-    private static final int NB_RANDOM_MOVES = 4;
-    private static final int NB_SIMULATIONS = 6;
-    private static final double ALPHA = 0.5;
-    private static final int NB_CANDIDATS = 8;
-    private static final int MAX_PROFONDEUR = 4;
+    private static final int NB_RANDOM_MOVES = 3;
+    private static final int NB_SIMULATIONS = 4;
+    private static final double ALPHA = 0.4;
+    private static final int NB_CANDIDATS = 6;
+    private static final int MAX_PROFONDEUR = 3;
+
 
     @Override
     public Move getNextMove(GameDTO snapshot) {
