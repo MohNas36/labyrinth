@@ -54,6 +54,11 @@ public class BaseTileViewModel implements TileViewModel{
         });
     }
 
+    /**
+     * Récupère l'indice de la position de départ contenue dans une tuile.
+     *
+     * Si la tuile ne contient pas de StartingPosition, la méthode renvoie null.
+     */
     private Integer getStartPos(Tile tile) {
         if(tile.getContent() instanceof StartingPosition sp){
             return sp.index();
@@ -61,6 +66,11 @@ public class BaseTileViewModel implements TileViewModel{
         return null;
     }
 
+    /**
+     * Récupère l'identifiant du trésor contenu dans une tuile.
+     *
+     * Si la tuile ne contient pas de Treasure, la méthode renvoie null.
+     */
     private Integer getTrsr(Tile tile) {
         if(tile.getContent() instanceof Treasure tr){
             return tr.id();
@@ -157,6 +167,11 @@ public class BaseTileViewModel implements TileViewModel{
         return currentPlayer.getValue();
     }
 
+    /**
+     * Met à jour l'indice du joueur courant affiché par la tuile.
+     *
+     * Cette méthode est appelée quand le joueur courant change dans le modèle.
+     */
     private void refreshCurrentPlayer() {
         Player player = game.getCurrentPlayer();
 

@@ -69,11 +69,24 @@ public class BaseUserProfilesViewModel implements UserProfilesViewModel {
         }
     }
 
+    /**
+     * Recharge la liste complète des profils depuis la base de données.
+     *
+     * On vide d'abord la liste observable, puis on ajoute les profils récupérés.
+     * Comme la liste est observable, les vues qui l'écoutent sont mises à jour.
+     */
     private void refreshUserProfiles() {
         userProfiles.clear();
         userProfiles.addAll(persistenceService.getUserProfiles());
     }
 
+    /**
+     * Recharge la liste des profils actuellement utilisés par les joueurs.
+     *
+     * On parcourt les slots du jeu. Si un joueur possède un UUID de profil,
+     * on récupère ce profil dans la base et on l'ajoute à la liste des profils
+     * sélectionnés.
+     */
     private void refreshSelectedUserProfiles() {
         selectedUserProfiles.clear();
 

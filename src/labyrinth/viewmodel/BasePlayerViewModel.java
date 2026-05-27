@@ -77,6 +77,12 @@ public class BasePlayerViewModel implements PlayerViewModel{
         refreshTreasure();
     }
 
+    /**
+     * Met à jour l'indicateur du joueur courant.
+     *
+     * Si le joueur représenté par ce ViewModel est le joueur courant,
+     * la propriété currentPlayer passe à true.
+     */
     private void refreshPlayer() {
         Player p = game.getCurrentPlayer();
 
@@ -88,6 +94,12 @@ public class BasePlayerViewModel implements PlayerViewModel{
         currentPlayer.set(index == p.getIndex());
     }
 
+    /**
+     * Met à jour le prochain trésor et les trésors déjà trouvés.
+     *
+     * Le prochain trésor correspond à la première carte du drawPile.
+     * Les trésors trouvés correspondent au contenu du discardPile.
+     */
     private void refreshTreasure() {
         foundTreasures.clear();
 
@@ -237,6 +249,15 @@ public class BasePlayerViewModel implements PlayerViewModel{
         refresh();
     }
 
+    /**
+     * Met à jour le nom affiché du joueur.
+     *
+     * Le nom dépend du type de joueur :
+     * - slot vide : "Libre" ;
+     * - bot : "Bot X" ;
+     * - joueur invité : "Joueur X" ;
+     * - profil utilisateur : nom sauvegardé dans la base.
+     */
     private void refreshName() {
         Slot slot = game.getSlots().get(index);
 
