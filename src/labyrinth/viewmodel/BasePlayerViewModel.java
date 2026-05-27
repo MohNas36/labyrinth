@@ -67,7 +67,7 @@ public class BasePlayerViewModel implements PlayerViewModel{
 
     }
 
-    private void refresh() {
+    public void refresh() {
         Slot slot = game.getSlots().get(index);
 
         isActive.set(slot.getPlayer() != null);

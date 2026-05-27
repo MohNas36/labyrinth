@@ -80,7 +80,9 @@ public class BaseCellViewModel implements CellViewModel{
 
         if (game.getGameState() == GameState.TURN_END) {
             game.endTurn();
+            gameViewModel.rebuildMazeViewModel();
             gameViewModel.showCurrentPlayerMessage();
+            gameViewModel.refreshPlayers();
         }
 
         System.out.println("Mouvement du joueur vers : " + position);

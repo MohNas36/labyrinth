@@ -1,5 +1,6 @@
 package labyrinth.model;
 
+import labyrinth.model.strategy.DefaultPlayStrategy;
 import labyrinth.model.strategy.Move;
 import labyrinth.model.strategy.PlayStrategy;
 import labyrinth.model.strategy.StubPlayStrategy;
@@ -96,29 +97,34 @@ public class Game {
         this.paths.setValue(null);
     }
 
-    public void startTurn(){
-        Player currentPlayer = getCurrentPlayer();
+    public void startTurn() {
+        Player current = getCurrentPlayer();
 
-        if(currentPlayer == null){
+        if (current == null) {
             return;
         }
 
-        if(!currentPlayer.isBot()){
+        if (!current.isBot()) {
             return;
         }
 
-        if(gameState.getValue() != GameState.SETUP){
+        if (gameState.getValue() != GameState.MAZE_MOVE) {
             return;
         }
 
         Move move = STRATEGY.getNextMove(new GameDTO(this));
+
+        if (move == null) {
+            return;
+        }
+
         rotateExtraTile(move.nbRotations());
         mazeMove(move.mazeMove());
 
         Tile destination = maze.getValue().getTiles().get(move.destination());
         movePlayer(destination);
 
-        if(gameState.getValue() == GameState.TURN_END){
+        if (gameState.getValue() == GameState.TURN_END) {
             endTurn();
         }
     }
@@ -131,6 +137,17 @@ public class Game {
         this.maze.setValue(MazeBuilder.buildStandardMaze());
         Random random = new Random();
 
+        System.out.println("=== AVANT CREATION JOUEURS MANQUANTS ===");
+        for (Slot slot : slots) {
+            Player p = slot.getPlayer();
+
+            System.out.println(
+                    "slot " + slot.getIndex()
+                            + " joueur=" + (p != null)
+                            + " bot=" + (p != null && p.isBot())
+            );
+        }
+
         //placer les joueurs sur leurs case de depart
         for (Slot slot : slots) {
             if (slot.getPlayer() == null) {
@@ -138,10 +155,14 @@ public class Game {
             }
         }
 
-        for(Slot slot : slots ){
-           Player actuel = slot.getPlayer();
-           Tile start = maze.getValue().getStartingTile(actuel);
-           start.addPlayer(actuel);
+        // placer uniquement les joueurs déjà présents sur leurs cases de départ
+        for (Slot slot : slots) {
+            Player actuel = slot.getPlayer();
+
+            if (actuel != null) {
+                Tile start = maze.getValue().getStartingTile(actuel);
+                start.addPlayer(actuel);
+            }
         }
 
         List<Integer> treasures = new ArrayList<>();
@@ -162,17 +183,44 @@ public class Game {
             playerTreasures[i % slots.size()].add(treasures.get(i)); // le % sert a répartir les trseors en tournant entrre les joueurs
         }
 
-        for(int i = 0 ; i <slots.size() ; i++){
-            slots.get(i).getPlayer().getDeck().init(playerTreasures[i]); // on initialise chaque deck de joueur
+        for (int i = 0; i < slots.size(); i++) {
+            Player player = slots.get(i).getPlayer();
+
+            if (player != null) {
+                player.getDeck().init(playerTreasures[i]);
+            }
         }
 
-        this.currentPlayerIndex.setValue(random.nextInt(slots.size()));
-        this.currentPlayer.setValue(slots.get(currentPlayerIndex.getValue()).getPlayer());
+        List<Integer> activeIndexes = new ArrayList<>();
+
+        for (Slot slot : slots) {
+            if (slot.getPlayer() != null) {
+                activeIndexes.add(slot.getIndex());
+            }
+        }
+
+        if (activeIndexes.isEmpty()) {
+            throw new IllegalStateException("Aucun joueur dans la partie");
+        }
+
+        int randomIndex = activeIndexes.get(random.nextInt(activeIndexes.size()));
+
+        this.currentPlayerIndex.setValue(randomIndex);
+        this.currentPlayer.setValue(slots.get(randomIndex).getPlayer());
+
+        System.out.println("=== AVANT DEBUT PARTIE ===");
+        for (Slot slot : slots) {
+            Player p = slot.getPlayer();
+
+            System.out.println(
+                    "slot " + slot.getIndex()
+                            + " joueur=" + (p != null)
+                            + " bot=" + (p != null && p.isBot())
+            );
+        }
 
         this.gameState.setValue(GameState.MAZE_MOVE);
         updatePaths();
-
-        startTurn();
     }
 
     public void rotateExtraTile(int nbTimes){
@@ -206,8 +254,15 @@ public class Game {
             throw new IllegalStateException("Le jeu n'est pas dans END TURN");
         }
 
-        currentPlayerIndex.setValue((this.currentPlayerIndex.getValue() + 1) % 4);
-        currentPlayer.setValue(slots.get(currentPlayerIndex.getValue()).getPlayer());
+        int index = currentPlayerIndex.getValue();
+
+        do {
+            index = (index + 1) % slots.size();
+        } while (slots.get(index).getPlayer() == null);
+
+        currentPlayerIndex.setValue(index);
+        currentPlayer.setValue(slots.get(index).getPlayer());
+
         gameState.setValue(GameState.MAZE_MOVE);
         updatePaths();
 

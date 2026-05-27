@@ -94,6 +94,14 @@ public class BaseGameViewModel implements GameViewModel {
         if (game.getCurrentPlayer() != null) {
             this.currentPlayerId.set(game.getCurrentPlayer().getIndex());
         }
+
+        game.startTurn();
+        rebuildMazeViewModel();
+        refreshPlayers();
+
+        if(game.getCurrentPlayer() != null) {
+            this.currentPlayerId.set(game.getCurrentPlayer().getIndex());
+        }
     }
 
     @Override
@@ -131,7 +139,7 @@ public class BaseGameViewModel implements GameViewModel {
             currentPlayerId.set(game.getCurrentPlayer().getIndex());
 
             services.getDialogService().publishMessage(
-                    "C'est au tour du joueur " + game.getCurrentPlayer().getIndex() + "."
+                    "C'est au tour de " + getPlayerLabel(game.getCurrentPlayer()) + "."
             );
         }
     }
@@ -142,5 +150,21 @@ public class BaseGameViewModel implements GameViewModel {
         mazeViewModel.set(null);
         state.set(GameState.SETUP);
         currentPlayerId.set(-1);
+    }
+
+    private String getPlayerLabel(labyrinth.model.Player player) {
+        if (player.isBot()) {
+            return "Bot " + (player.getIndex() + 1);
+        }
+
+        return "Joueur " + (player.getIndex() + 1);
+    }
+
+    public void refreshPlayers() {
+        for (PlayerViewModel playerViewModel : playerViewModels) {
+            if (playerViewModel instanceof BasePlayerViewModel basePlayerViewModel) {
+                basePlayerViewModel.refresh();
+            }
+        }
     }
 }
