@@ -1,6 +1,6 @@
 # Labyrinthe
 
-Ce projet est une adaptation en JavaFX du jeu **Labyrinthe**.
+Ce projet est une adaptation en JavaFX du jeu **Labyrinthe**.  
 Le but est simple : déplacer son pion dans le labyrinthe, trouver tous ses trésors, puis revenir à sa case de départ avant les autres joueurs.
 
 L’application gère les joueurs humains, les bots, les profils utilisateurs, la sauvegarde/le chargement, ainsi que la reprise automatique de la dernière partie.
@@ -15,7 +15,9 @@ Donc, si aucune nouvelle partie n’est créée et qu’aucune sauvegarde n’es
 
 Pour commencer une vraie nouvelle partie, il faut passer par :
 
-File -> New
+```text
+File > New
+```
 
 Ensuite, il faut configurer les joueurs, puis cliquer sur **Start game**.
 
@@ -25,7 +27,7 @@ Ensuite, il faut configurer les joueurs, puis cliquer sur **Start game**.
 
 Après avoir cliqué sur **File > New**, il faut configurer les joueurs avant de lancer la partie.
 
-La partie fonctionne toujours avec **4 emplacements de joueurs**.
+La partie fonctionne toujours avec **4 emplacements de joueurs**.  
 Si un emplacement n’est pas modifié, il est considéré comme un joueur humain par défaut.
 
 Si on veut utiliser des bots, il faut donc les ajouter manuellement avant de cliquer sur **Start game**.
@@ -64,10 +66,12 @@ Dans le menu des joueurs à droite, l’affichage commence à `1`.
 
 Donc :
 
+```text
 P([0]) sur le plateau = Joueur 1 dans le menu
 P([1]) sur le plateau = Joueur 2 dans le menu
 P([2]) sur le plateau = Joueur 3 dans le menu
 P([3]) sur le plateau = Joueur 4 dans le menu
+```
 
 C’est seulement une différence d’affichage. Le joueur reste bien le même.
 
@@ -97,8 +101,9 @@ Les carrés verts représentent les trésors.
 
 Exemple :
 
-
+```text
 TR7
+```
 
 signifie que la tuile contient le trésor numéro `7`.
 
@@ -110,8 +115,9 @@ Les carrés rouges représentent les cases de départ.
 
 Exemple :
 
-
+```text
 SP0
+```
 
 correspond à la case de départ du joueur d’indice `0`.
 
@@ -129,10 +135,12 @@ Le menu **File** permet de gérer la partie.
 
 Il contient :
 
+```text
 New   : créer une nouvelle partie
 Load  : charger une sauvegarde
 Save  : sauvegarder la partie actuelle
 Exit  : quitter l’application
+```
 
 ### Menu Help
 
@@ -200,16 +208,18 @@ Chaque joueur possède une pile de trésors à trouver.
 
 Dans le code, cette pile est séparée en deux parties :
 
+```text
 drawPile    = trésors encore à trouver
 discardPile = trésors déjà trouvés
+```
 
-Le joueur ne cherche que le trésor situé au sommet de sa drawPile.
+Le joueur ne cherche que le trésor situé au sommet de sa `drawPile`.
 
 Quand il atteint une tuile contenant ce trésor :
 
 1. le trésor est considéré comme trouvé ;
-2. il est retiré de la drawPile ;
-3. il est ajouté dans la discardPile ;
+2. il est retiré de la `drawPile` ;
+3. il est ajouté dans la `discardPile` ;
 4. le joueur passe ensuite à son prochain trésor.
 
 Le trésor reste affiché sur la tuile du plateau, car il fait partie du décor du labyrinthe.
@@ -221,16 +231,18 @@ Le trésor reste affiché sur la tuile du plateau, car il fait partie du décor 
 Un joueur gagne quand :
 
 1. il a trouvé tous ses trésors ;
-2. sa drawPile est vide ;
+2. sa `drawPile` est vide ;
 3. il revient sur sa propre case de départ.
 
 Autrement dit :
 
+```text
 drawPile vide
 +
 joueur sur sa StartingPosition
 =
 victoire
+```
 
 Quand ces conditions sont réunies, la partie passe en fin de jeu et un message indique le gagnant.
 
@@ -244,7 +256,9 @@ L’application permet de sauvegarder et charger une partie.
 
 Pour sauvegarder la partie actuelle :
 
+```text
 File > Save
+```
 
 Le programme demande alors où enregistrer la sauvegarde (format json).
 
@@ -252,7 +266,9 @@ Le programme demande alors où enregistrer la sauvegarde (format json).
 
 Pour charger une partie :
 
+```text
 File > Load
+```
 
 Le programme demande alors de choisir un fichier de sauvegarde (format json).
 
@@ -267,7 +283,9 @@ C’est pour cela que, si on lance directement **Start game** sans faire **File 
 
 Les profils utilisateurs peuvent être gérés depuis :
 
+```text
 Edit > Manage Profiles
+```
 
 Un profil permet d’associer un joueur à un nom enregistré.
 
