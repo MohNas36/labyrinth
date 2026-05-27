@@ -56,6 +56,13 @@ public class SqlPersistenceService {
     }
 
 
+    /**
+     * Crée un nouveau profil utilisateur dans la base de données.
+     *
+     * Un UUID est généré automatiquement pour identifier le profil.
+     * Après la création, les handlers sont notifiés pour que l'interface
+     * puisse se mettre à jour.
+     */
     public UUID createUserProfile(String name){
         UUID uuid = UUID.randomUUID();
 
@@ -76,6 +83,11 @@ public class SqlPersistenceService {
         }
     }
 
+    /**
+     * Récupère tous les profils utilisateurs enregistrés.
+     *
+     * Chaque ligne de la table profiles est transformée en UserProfile.
+     */
     public List<UserProfile> getUserProfiles() {
         List<UserProfile> profiles = new ArrayList<>();
 
@@ -136,6 +148,12 @@ public class SqlPersistenceService {
         }
     }
 
+    /**
+     * Supprime un profil utilisateur de la base de données.
+     *
+     * Après la suppression, les handlers sont notifiés pour que les listes
+     * de profils soient rechargées.
+     */
     public void deleteUserProfile(UUID userId) {
         String sql = "DELETE FROM profiles WHERE id = ?";
 
@@ -160,6 +178,12 @@ public class SqlPersistenceService {
         handlers.remove(handler);
     }
 
+    /**
+     * Notifie tous les handlers qu'un profil utilisateur a changé.
+     *
+     * Le UUID envoyé permet aux objets qui écoutent de savoir quel profil
+     * doit être rechargé ou vérifié.
+     */
     private void firePlayerInfoChanged(UUID playerId) {
         for (UserProfileChangedHandler handler : handlers) {
             handler.handlePlayerInfoChanged(playerId);

@@ -73,6 +73,12 @@ public class MazeFormatter {
         return res;
     }
 
+    /**
+     * Convertit le contenu d'une tuile en caractère affichable.
+     *
+     * Une case vide donne un espace, une position de départ donne son indice,
+     * et un trésor donne une lettre basée sur son identifiant.
+     */
     private char getContentToChar(Content c){
         if(c instanceof None) return ' ';
         if( c instanceof StartingPosition sp) return (char) ('0' + sp.index());
