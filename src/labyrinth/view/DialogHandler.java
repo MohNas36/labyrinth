@@ -39,6 +39,13 @@ public class DialogHandler {
         });
     }
 
+    /**
+     * Traite une demande de fichier.
+     *
+     * Selon le mode de la demande, on ouvre soit un dialogue d'ouverture,
+     * soit un dialogue de sauvegarde. Le fichier choisi est ensuite donné
+     * au FileRequest.
+     */
     private void handleFileRequest(FileRequest fileRequest) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(fileRequest.getRequest());
@@ -54,6 +61,12 @@ public class DialogHandler {
         fileRequest.setFile(file);
     }
 
+    /**
+     * Affiche un message dans une fenêtre JavaFX.
+     *
+     * Le type de l'alerte dépend du fait que le message soit une erreur
+     * ou un simple message d'information.
+     */
     private void handleMessage(Message message) {
         Alert.AlertType type;
 
@@ -70,7 +83,11 @@ public class DialogHandler {
         alert.showAndWait();
     }
 
-
+    /**
+     * Affiche la fenêtre de gestion des profils.
+     *
+     * Si la fenêtre est déjà ouverte, elle est simplement remise au premier plan.
+     */
     private void handleProfilesManagerRequest(ProfilesManagerRequest request) {
         profilesManagerWindow.show();
         profilesManagerWindow.toFront();

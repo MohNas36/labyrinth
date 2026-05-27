@@ -122,6 +122,12 @@ public class BoardView extends StackPane {
 
     }
 
+    /**
+     * Ajuste la taille du plateau.
+     *
+     * On garde une taille carrée en prenant la plus petite valeur
+     * entre la largeur et la hauteur disponibles.
+     */
     private void update(){
         double taille = Math.min(getWidth() , getHeight());
         gridPane.setPrefSize(taille , taille);

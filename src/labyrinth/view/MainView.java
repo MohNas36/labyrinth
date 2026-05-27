@@ -35,6 +35,12 @@ public class MainView extends BorderPane {
 
     }
 
+    /**
+     * Met à jour la vue centrale selon l'état du jeu.
+     *
+     * Si le jeu est en SETUP, on affiche l'écran de préparation.
+     * Sinon, on affiche le plateau de jeu.
+     */
     public void updateView() {
 
         if (viewModel.stateProperty().getValue() == GameState.SETUP) {

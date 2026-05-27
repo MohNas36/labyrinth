@@ -77,6 +77,12 @@ public class PlayerView extends VBox {
         getChildren().addAll(players, treasures, buttons);
     }
 
+    /**
+     * Met à jour l'affichage du deck et de la défausse.
+     *
+     * Le deck affiche le prochain trésor à trouver.
+     * La défausse affiche les trésors déjà trouvés par le joueur.
+     */
     private void updateTreasureLabels(PlayerViewModel viewModel) {
         if (!viewModel.isActive()) {
             deckLabel.setText("Deck : -");
@@ -101,6 +107,11 @@ public class PlayerView extends VBox {
         }
     }
 
+    /**
+     * Transforme une liste d'identifiants de trésors en texte lisible.
+     *
+     * Exemple : [3, 7, 10] devient "TR3, TR7, TR10".
+     */
     private String formatTreasures(List<Integer> treasures) {
         String result = "";
 

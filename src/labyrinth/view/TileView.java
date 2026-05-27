@@ -83,6 +83,11 @@ public class TileView extends StackPane {
         updateCurrent(tileViewModel);
     }
 
+    /**
+     * Met à jour l'image de la tuile.
+     *
+     * L'image dépend du type de tuile et de son orientation.
+     */
     public void updateImage(TileViewModel tileViewModel){
         TileKind kind = tileViewModel.getKind();
         Direction direction = tileViewModel.getDirection();
@@ -91,6 +96,12 @@ public class TileView extends StackPane {
         imageView.setImage(img);
     }
 
+    /**
+     * Met à jour l'affichage de la position de départ.
+     *
+     * Si la tuile contient une StartingPosition, son indice est affiché
+     * dans le coin de la tuile.
+     */
     public void updateStartingPosition(TileViewModel tileViewModel){
         if(tileViewModel.getStartingPosition().isPresent()){
             startingPositionLabel.setText("SP" + String.valueOf(tileViewModel.getStartingPosition().getAsInt()));
@@ -100,6 +111,12 @@ public class TileView extends StackPane {
         }
     }
 
+    /**
+     * Met à jour l'affichage du trésor.
+     *
+     * Si la tuile contient un trésor, son identifiant est affiché
+     * sous forme de label vert.
+     */
     public void updateTreasure(TileViewModel tileViewModel){
         if(tileViewModel.getTreasure().isPresent()){
             treasureLabel.setText("TR" + String.valueOf(tileViewModel.getTreasure().getAsInt()));
@@ -109,6 +126,12 @@ public class TileView extends StackPane {
         }
     }
 
+    /**
+     * Met à jour la liste des joueurs présents sur la tuile.
+     *
+     * Les indices affichés correspondent aux indices internes du modèle,
+     * donc ils commencent à 0.
+     */
     public void updatePlayers(TileViewModel tileViewModel){
         if(tileViewModel.getPlayers().isEmpty()){
             playersLabel.setText("");
@@ -118,6 +141,12 @@ public class TileView extends StackPane {
         }
     }
 
+    /**
+     * Met à jour l'indicateur du joueur courant.
+     *
+     * Si le joueur courant se trouve sur cette tuile, un label blanc
+     * est affiché au centre de la tuile.
+     */
     public void updateCurrent(TileViewModel tileViewModel){
         if(tileViewModel.getPlayers().contains(tileViewModel.getCurrentPlayer())){
             currentPlayerLabel.setText(String.valueOf("C" + tileViewModel.getCurrentPlayer()));
